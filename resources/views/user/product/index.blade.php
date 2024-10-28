@@ -1,4 +1,4 @@
-@extends('backend.layouts.master')
+@extends('user.layouts.master')
 
 @section('main-content')
  <!-- DataTales Example -->
@@ -9,8 +9,8 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Product Lists</h6>
-      <a href="{{route('product.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Product</a>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Product </h6>
+      <a href="{{route('user.product.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Product</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -22,7 +22,7 @@
               <th>Title</th>
               <th>Category</th>
               <th>Is Featured</th>
-              <th>Price</th>
+              <th>Pricefadfasfasdfs</th>
               <th>Discount</th>
               {{-- <th>Size</th> --}}
               <th>Condition</th>

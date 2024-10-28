@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique()->nullable();
+            $table->string('student_id')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('photo')->nullable();
@@ -26,6 +27,13 @@ class CreateUsersTable extends Migration
             $table->enum('status',['active','inactive'])->default('active');
             $table->rememberToken()->nullable();
             $table->timestamps();
+
+            //Foreign key
+            $table->unsignedBigInteger('faculties_id')->nullable();
+            $table->unsignedBigInteger('campus_id')->nullable();
+
+            //Foreign key references
+            $table->foreign('faculties_id')->references('id')->on('faculties')->onDelete('cascade'); // Foreign key to users
         });
     }
 

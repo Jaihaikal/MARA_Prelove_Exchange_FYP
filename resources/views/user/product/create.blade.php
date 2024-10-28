@@ -1,11 +1,11 @@
-@extends('backend.layouts.master')
+@extends('user.layouts.master')
 
 @section('main-content')
 
 <div class="card">
     <h5 class="card-header">Add Product</h5>
     <div class="card-body">
-      <form method="post" action="{{route('product.store')}}">
+      <form method="post" action="{{route('user.product.store')}}">
         {{csrf_field()}}
         <div class="form-group">
           <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
@@ -73,7 +73,7 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        {{-- <div class="form-group">
+        <div class="form-group">
           <label for="size">Size</label>
           <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
               <option value="">--Select any size--</option>
@@ -82,7 +82,7 @@
               <option value="L">Large (L)</option>
               <option value="XL">Extra Large (XL)</option>
           </select>
-        </div> --}}
+        </div>
 
         <div class="form-group">
           <label for="brand_id">Brand</label>
@@ -99,8 +99,6 @@
         <div class="form-group">
           <label for="condition">Condition</label>
           <select name="condition" class="form-control">
-              <option value="">--Select Condition--</option>
-              <option value="default">Default</option>
               <option value="new">New</option>
               <option value="used">Used</option>
           </select>

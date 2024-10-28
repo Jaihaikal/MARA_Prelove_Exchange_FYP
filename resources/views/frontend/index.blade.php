@@ -10,7 +10,7 @@
             @endforeach
 
         </ol>
-        <div class="carousel-inner" role="listbox">
+        {{-- <div class="carousel-inner" role="listbox">
                 @foreach($banners as $key=>$banner)
                 <div class="carousel-item {{(($key==0)? 'active' : '')}}">
                     <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
             @endforeach
-        </div>
+        </div> --}}
         <a class="carousel-control-prev" href="#Gslider" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
@@ -74,7 +74,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title">
-                        <h2>Trending Item</h2>
+                        <h2>Recently Added</h2>
                     </div>
                 </div>
             </div>
