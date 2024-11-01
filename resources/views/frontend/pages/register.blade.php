@@ -50,6 +50,43 @@
                                         @enderror
                                     </div>
                                 </div>
+                                
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Student ID<span>*</span></label>
+                                        <input type="text" name="student_id" placeholder="" required="required" value="{{old('student_id')}}">
+                                        @error('student_id')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Phone Number<span>*</span></label>
+                                        <input type="text" name="phone" placeholder="" required="required" value="{{old('phone')}}">
+                                        @error('phone')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-12" style="padding-bottom: 20pt;">
+                                    <label>Faculty<span>*</span></label>
+
+                                    <div class="form-group">
+                                        <select name="faculty_id"  required="required" class="form-control select2">
+                                            <option value="" disabled selected>Select Faculty</option>
+                                            @foreach($faculties as $faculty)
+                                                <option value="{{ $faculty->id }}" {{ old('faculty_id') == $faculty->id ? 'selected' : '' }}>
+                                                    {{ $faculty->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('faculty_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Your Password<span>*</span></label>
@@ -115,4 +152,13 @@
         background:rgb(243, 26, 26) !important;
     }
 </style>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select Faculty",
+            allowClear: true
+        });
+    });
+</script>
 @endpush

@@ -17,15 +17,25 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique()->nullable();
+            $table->string('student_id')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('photo')->nullable();
+            $table->string('phone')->nullable(); // Add the phone column
+
             $table->enum('role',['admin','user'])->default('user');
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->enum('status',['active','inactive'])->default('active');
             $table->rememberToken()->nullable();
             $table->timestamps();
+
+            //Foreign key
+            $table->unsignedBigInteger('faculty_id')->nullable();
+            $table->unsignedBigInteger('campus_id')->nullable();
+
+            //Foreign key references
+            $table->foreign('faculty_id')->references('id')->on('faculties')->onDelete('cascade'); // Foreign key to users
         });
     }
 

@@ -36,6 +36,12 @@
 <link rel="stylesheet" href="{{asset('frontend/css/reset.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/css/style.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/css/responsive.css')}}">
+<!-- Include Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5f2e5abf393162001291e431&product=inline-share-buttons' async='async'></script>
 <style>
     /* Multilevel dropdown */

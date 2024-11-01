@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -9,7 +11,7 @@ use App\Models\Brand;
 
 use Illuminate\Support\Str;
 
-class ProductController extends Controller
+class UserProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,9 +20,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products=Product::getAllProduct();
+    $products = Product::where('user_id', auth()->id())->paginate(10);
         // return $products;
-        return view('backend.product.index')->with('products',$products);
+        return view('user.product.index')->with('products',$products);
     }
 
     /**
@@ -33,7 +35,7 @@ class ProductController extends Controller
         $brand=Brand::get();
         $category=Category::where('is_parent',1)->get();
         // return $category;
-        return view('backend.product.create')->with('categories',$category)->with('brands',$brand);
+        return view('user.product.create')->with('categories',$category)->with('brands',$brand);
     }
 
     /**
@@ -47,24 +49,20 @@ class ProductController extends Controller
 
         // return $request->all();
         $this->validate($request,[
-            'title'=>'required|string',
-            'summary'=>'required|string',
+            'title'=>'string|required',
+            'summary'=>'string|required',
             'description'=>'string|nullable',
-            'photo'=>'required|string|',
-            // 'size'=>'nullable',
+            'photo'=>'string|required',
+            'size'=>'nullable',
             'stock'=>"required|numeric",
             'cat_id'=>'required|exists:categories,id',
-            'child_cat_id'=>'nullable|exists:categories,id',
             'brand_id'=>'nullable|exists:brands,id',
+            'child_cat_id'=>'nullable|exists:categories,id',
             'is_featured'=>'sometimes|in:1',
             'status'=>'required|in:active,inactive',
-            'condition'=>'required|in:default,new,hot',
+            'condition'=>'required|in:default,new,used',
             'price'=>'required|numeric',
             'discount'=>'nullable|numeric',
-        ], [], [
-            // Custom attribute names
-            'cat_id' => 'category',
-            'child_cat_id' => 'subcategory',
         ]);
 
         $data=$request->all();
@@ -93,7 +91,7 @@ class ProductController extends Controller
         else{
             request()->session()->flash('error','Please try again!!');
         }
-        return redirect()->route('product.index');
+        return redirect()->route('user.product.index');
 
     }
 
@@ -121,10 +119,9 @@ class ProductController extends Controller
         $category=Category::where('is_parent',1)->get();
         $items=Product::where('id',$id)->get();
         // return $items;
-        return view('backend.product.edit')->with('product',$product)
+        return view('user.product.edit')->with('product',$product)
                     ->with('brands',$brand)
-                    ->with('categories',$category)
-                    ->with('items',$items);
+                    ->with('categories',$category)->with('items',$items);
     }
 
     /**
@@ -152,11 +149,6 @@ class ProductController extends Controller
             'condition'=>'required|in:default,new,hot',
             'price'=>'required|numeric',
             'discount'=>'nullable|numeric'
-        ], [], [
-            // Custom attribute names
-            'cat_id' => 'category',
-            'child_cat_id' => 'subcategory',
-            // Add other custom names as needed
         ]);
 
         $data=$request->all();
@@ -172,14 +164,11 @@ class ProductController extends Controller
         $status=$product->fill($data)->save();
         if($status){
             request()->session()->flash('success','Product Successfully updated');
-            return redirect()->route('product.index');
-
         }
         else{
             request()->session()->flash('error','Please try again!!');
-        return redirect()->route('product.edit',$id);
-
         }
+        return redirect()->route('product.index');
     }
 
     /**

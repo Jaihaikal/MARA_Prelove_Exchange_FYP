@@ -17,6 +17,8 @@
     use App\Http\Controllers\HomeController;
     use \UniSharp\LaravelFilemanager\Lfm;
 
+    use App\Http\Controllers\ProductController;
+    use App\Http\Controllers\User\UserProductController;
     /*
     |--------------------------------------------------------------------------
     | Web Routes
@@ -137,7 +139,7 @@
         // Category
         Route::resource('/category', 'CategoryController');
         // Product
-        Route::resource('/product', 'ProductController');
+        Route::resource('product', ProductController::class);
         // Ajax for sub category
         Route::post('/category/{id}/child', 'CategoryController@getChildByParent');
         // POST category
@@ -171,7 +173,7 @@
 
 
 // User section start
-    Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
+    Route::group(['prefix' => 'user', 'middleware' => ['user']], function () {
         Route::get('/', [HomeController::class, 'index'])->name('user');
         // Profile
         Route::get('/profile', [HomeController::class, 'profile'])->name('user-profile');
@@ -195,8 +197,11 @@
         // Password Change
         Route::get('change-password', [HomeController::class, 'changePassword'])->name('user.change.password.form');
         Route::post('change-password', [HomeController::class, 'changPasswordStore'])->name('change.password');
+        Route::resource('product', UserProductController::class)->names('user.product');
 
     });
+
+  
 
     Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
         Lfm::routes();

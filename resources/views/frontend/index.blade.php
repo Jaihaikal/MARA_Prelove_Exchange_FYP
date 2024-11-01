@@ -10,7 +10,7 @@
             @endforeach
 
         </ol>
-        <div class="carousel-inner" role="listbox">
+        {{-- <div class="carousel-inner" role="listbox">
                 @foreach($banners as $key=>$banner)
                 <div class="carousel-item {{(($key==0)? 'active' : '')}}">
                     <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
             @endforeach
-        </div>
+        </div> --}}
         <a class="carousel-control-prev" href="#Gslider" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
@@ -74,7 +74,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title">
-                        <h2>Trending Item</h2>
+                        <h2>Recently Added</h2>
                     </div>
                 </div>
             </div>
@@ -144,8 +144,8 @@
                                                 @php
                                                     $after_discount=($product->price-($product->price*$product->discount)/100);
                                                 @endphp
-                                                <span>${{number_format($after_discount,2)}}</span>
-                                                <del style="padding-left:4%;">${{number_format($product->price,2)}}</del>
+                                                <span>RM {{number_format($after_discount,2)}}</span>
+                                                <del style="padding-left:4%;">RM {{number_format($product->price,2)}}</del>
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +181,6 @@
                             @endphp
                             <img src="{{$photo[0]}}" alt="{{$photo[0]}}">
                             <div class="content">
-                                <p>{{$data->cat_info['title']}}</p>
                                 <h3>{{$data->title}} <br>Up to<span> {{$data->discount}}%</span></h3>
                                 <a href="{{route('product-detail',$data->slug)}}">Shop Now</a>
                             </div>
@@ -235,11 +234,11 @@
                             <div class="product-content">
                                 <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
                                 <div class="product-price">
-                                    <span class="old">${{number_format($product->price,2)}}</span>
+                                    <span class="old">RM {{number_format($product->price,2)}}</span>
                                     @php
                                     $after_discount=($product->price-($product->price*$product->discount)/100)
                                     @endphp
-                                    <span>${{number_format($after_discount,2)}}</span>
+                                    <span>RM {{number_format($after_discount,2)}}</span>
                                 </div>
                             </div>
                         </div>
@@ -287,7 +286,7 @@
                                 <div class="col-lg-6 col-md-6 col-12 no-padding">
                                     <div class="content">
                                         <h4 class="title"><a href="#">{{$product->title}}</a></h4>
-                                        <p class="price with-discount">${{number_format($product->discount,2)}}</p>
+                                        <p class="price with-discount">RM {{number_format($product->discount,2)}}</p>
                                     </div>
                                 </div>
                                 </div>

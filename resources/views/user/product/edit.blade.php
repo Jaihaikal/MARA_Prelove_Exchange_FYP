@@ -5,17 +5,6 @@
 <div class="card">
     <h5 class="card-header">Edit Product</h5>
     <div class="card-body">
-          <!-- Display Validation Errors -->
-          @if ($errors->any())
-          <div class="alert alert-danger">
-              <ul>
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-          </div>
-      @endif
-
       <form method="post" action="{{route('product.update',$product->id)}}">
         @csrf 
         @method('PATCH')
@@ -59,7 +48,7 @@
               @endforeach
           </select>
           @error('cat_id')
-          <small class="text-danger">{{ $message }}</small>
+          <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
         @php 
@@ -126,7 +115,7 @@
               <option value="hot" {{(($product->condition=='hot')? 'selected':'')}}>Hot</option>
           </select>
           @error('condition')
-          <small class="text-danger">{{ $message }}</small>
+          <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
 

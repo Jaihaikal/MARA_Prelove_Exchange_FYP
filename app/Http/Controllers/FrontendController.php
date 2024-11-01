@@ -17,6 +17,8 @@ use DB;
 use Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+
+use App\Models\Faculty;
 class FrontendController extends Controller
 {
    
@@ -357,7 +359,7 @@ class FrontendController extends Controller
             return redirect()->route('home');
         }
         else{
-            request()->session()->flash('error','Invalid email and password pleas try again!');
+            request()->session()->flash('error','Invalid email and password please try again!');
             return redirect()->back();
         }
     }
@@ -369,8 +371,10 @@ class FrontendController extends Controller
         return back();
     }
 
-    public function register(){
-        return view('frontend.pages.register');
+    public function register()
+    {
+        $faculties = Faculty::all();
+        return view('frontend.pages.register', compact('faculties'))->withErrors(session('errors'));
     }
     public function registerSubmit(Request $request){
         // return $request->all();
@@ -378,27 +382,47 @@ class FrontendController extends Controller
             'name'=>'string|required|min:2',
             'email'=>'string|required|unique:users,email',
             'password'=>'required|min:6|confirmed',
+            'phone' => 'required|string|max:255|unique:users',
+            'faculty_id' => 'string|required',
+            'student_id' => 'string|required|unique:users,student_id',
         ]);
         $data=$request->all();
-        // dd($data);
-        $check=$this->create($data);
-        Session::put('user',$data['email']);
-        if($check){
-            request()->session()->flash('success','Successfully registered');
+        dd($data);
+        
+        if ( $this->create($data)) {
+            request()->session()->flash('success', 'Successfully registered');
             return redirect()->route('home');
+        } else {
+            request()->session()->flash('error', 'Please try again!');
+            return redirect()->route('user.register');
         }
-        else{
-            request()->session()->flash('error','Please try again!');
-            return back();
-        }
+        // try {
+        //     $user = $this->create($data);
+        //     Session::put('user', $data['email']);
+        //     request()->session()->flash('success', 'Successfully registered');
+        //     return redirect()->route('home');
+        // } catch (\Exception $e) {
+        //     request()->session()->flash('error', 'Failed to register. Please try again.');
+        //     return redirect()->route('user.register')->withErrors(['message' => $e->getMessage()]);
+        // }
+
+        // $this->create($data);
+        // Session::put('user', $data['email']);
     }
-    public function create(array $data){
+    public function create(array $data)
+    {
         return User::create([
-            'name'=>$data['name'],
-            'email'=>$data['email'],
-            'password'=>Hash::make($data['password']),
-            'status'=>'active'
-            ]);
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'phone' => $data['phone'],
+            'faculty_id' => $data['faculty_id'],
+            'student_id' => $data['student_id'],
+            'status' => 'active',
+
+        ]);
+
+        
     }
     // Reset password
     public function showResetForm(){

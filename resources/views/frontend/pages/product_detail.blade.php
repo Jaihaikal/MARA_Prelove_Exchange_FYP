@@ -66,6 +66,7 @@
 											<!-- Description -->
 											<div class="short">
 												<h4>{{$product_detail->title}}</h4>
+
 												<div class="rating-main">
 													<ul class="rating">
 														@php
@@ -84,8 +85,15 @@
                                                 @php 
                                                     $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
                                                 @endphp
-												<p class="price"><span class="discount">${{number_format($after_discount,2)}}</span><s>${{number_format($product_detail->price,2)}}</s> </p>
-												<p class="description">{!!($product_detail->summary)!!}</p>
+												<p class="price"><span class="discount">RM {{number_format($after_discount,2)}}</span><s>RM {{number_format($product_detail->price,2)}}</s> </p>
+												<div>
+													<p class="description">{!!($product_detail->summary)!!}</p>
+													{{-- <p class="description">Product Summary <br>{!!($product_detail->summary)!!}</p> --}}
+													<p class="description">
+														{!!($product_detail->user->name)!!}
+													</p>
+												</div>
+												
 											</div>
 											<!--/ End Description -->
 											<!-- Color -->
