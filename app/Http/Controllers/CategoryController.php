@@ -41,9 +41,9 @@ class CategoryController extends Controller
     {
         // return $request->all();
         $this->validate($request,[
-            'title'=>'string|required',
+            'title'=>'required|string',
             'summary'=>'string|nullable',
-            'photo'=>'string|nullable',
+            'photo'=>'string',
             'status'=>'required|in:active,inactive',
             'is_parent'=>'sometimes|in:1',
             'parent_id'=>'nullable|exists:categories,id',
@@ -105,9 +105,9 @@ class CategoryController extends Controller
         // return $request->all();
         $category=Category::findOrFail($id);
         $this->validate($request,[
-            'title'=>'string|required',
+            'title'=>'required|string',
             'summary'=>'string|nullable',
-            'photo'=>'string|nullable',
+            'photo'=>'string',
             'status'=>'required|in:active,inactive',
             'is_parent'=>'sometimes|in:1',
             'parent_id'=>'nullable|exists:categories,id',

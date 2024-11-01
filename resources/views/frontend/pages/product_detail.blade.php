@@ -86,8 +86,14 @@
                                                     $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
                                                 @endphp
 												<p class="price"><span class="discount">RM {{number_format($after_discount,2)}}</span><s>RM {{number_format($product_detail->price,2)}}</s> </p>
-												<p class="description">Product Summary{!!($product_detail->summary)!!}</p>
-												<p class="description">Seller{!!($product_detail->title)!!}</p>
+												<div>
+													<p class="description">{!!($product_detail->summary)!!}</p>
+													{{-- <p class="description">Product Summary <br>{!!($product_detail->summary)!!}</p> --}}
+													<p class="description">
+														{!!($product_detail->user->name)!!}
+													</p>
+												</div>
+												
 											</div>
 											<!--/ End Description -->
 											<!-- Color -->

@@ -29,6 +29,20 @@ class UserSeeder extends Seeder
                 'role'=>'user',
                 'status'=>'active'
             ),
+            array(
+                'name'=>'Jai',
+                'email'=>'jai@gmail.com',
+                'password'=>Hash::make('1111'),
+                'role'=>'user',
+                'status'=>'active'
+            ),
+            array(
+                'name'=>'Hamid',
+                'email'=>'hamid@gmail.com',
+                'password'=>Hash::make('1111'),
+                'role'=>'user',
+                'status'=>'active'
+            ),
         );
 
         DB::table('users')->insert($data);

@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('photo')->nullable();
+            $table->string('phone')->nullable(); // Add the phone column
+
             $table->enum('role',['admin','user'])->default('user');
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
@@ -29,11 +31,11 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             //Foreign key
-            $table->unsignedBigInteger('faculties_id')->nullable();
+            $table->unsignedBigInteger('faculty_id')->nullable();
             $table->unsignedBigInteger('campus_id')->nullable();
 
             //Foreign key references
-            $table->foreign('faculties_id')->references('id')->on('faculties')->onDelete('cascade'); // Foreign key to users
+            $table->foreign('faculty_id')->references('id')->on('faculties')->onDelete('cascade'); // Foreign key to users
         });
     }
 

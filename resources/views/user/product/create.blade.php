@@ -46,6 +46,9 @@
                   <option value='{{$cat_data->id}}'>{{$cat_data->title}}</option>
               @endforeach
           </select>
+          @error('cat_id')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
         </div>
 
         <div class="form-group d-none" id="child_cat_div">
@@ -73,7 +76,7 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
           <label for="size">Size</label>
           <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
               <option value="">--Select any size--</option>
@@ -82,7 +85,7 @@
               <option value="L">Large (L)</option>
               <option value="XL">Extra Large (XL)</option>
           </select>
-        </div>
+        </div> --}}
 
         <div class="form-group">
           <label for="brand_id">Brand</label>
@@ -102,6 +105,9 @@
               <option value="new">New</option>
               <option value="used">Used</option>
           </select>
+          @error('condition')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
         </div>
 
         <div class="form-group">

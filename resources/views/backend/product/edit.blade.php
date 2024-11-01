@@ -5,6 +5,17 @@
 <div class="card">
     <h5 class="card-header">Edit Product</h5>
     <div class="card-body">
+          <!-- Display Validation Errors -->
+          @if ($errors->any())
+          <div class="alert alert-danger">
+              <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+          </div>
+      @endif
+
       <form method="post" action="{{route('product.update',$product->id)}}">
         @csrf 
         @method('PATCH')
@@ -47,6 +58,9 @@
                   <option value='{{$cat_data->id}}' {{(($product->cat_id==$cat_data->id)? 'selected' : '')}}>{{$cat_data->title}}</option>
               @endforeach
           </select>
+          @error('cat_id')
+          <small class="text-danger">{{ $message }}</small>
+          @enderror
         </div>
         @php 
           $sub_cat_info=DB::table('categories')->select('title')->where('id',$product->child_cat_id)->get();
@@ -77,7 +91,7 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
           <label for="size">Size</label>
           <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
               <option value="">--Select any size--</option>
@@ -92,7 +106,7 @@
               <option value="XL"  @if( in_array( "XL",$data ) ) selected @endif>Extra Large</option>
               @endforeach
           </select>
-        </div>
+        </div> --}}
         <div class="form-group">
           <label for="brand_id">Brand</label>
           <select name="brand_id" class="form-control">
@@ -111,6 +125,9 @@
               <option value="new" {{(($product->condition=='new')? 'selected':'')}}>New</option>
               <option value="hot" {{(($product->condition=='hot')? 'selected':'')}}>Hot</option>
           </select>
+          @error('condition')
+          <small class="text-danger">{{ $message }}</small>
+          @enderror
         </div>
 
         <div class="form-group">

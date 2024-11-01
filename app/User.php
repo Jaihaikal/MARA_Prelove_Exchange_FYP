@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Faculty;
 
 class User extends Authenticatable
 {
@@ -17,7 +18,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role','photo','status','provider','provider_id',
+        'name',
+        'email',
+        'password',
+        'student_id', 
+        'faculty_id',
+        'phone',
+        'role',
+        'photo',
+        'status',
+        'provider',
+        'provider_id',
     ];
 
     /**
@@ -44,6 +55,11 @@ class User extends Authenticatable
 
     public function product(){
         return $this->hasMany(Product::class);
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
     }
 
     
