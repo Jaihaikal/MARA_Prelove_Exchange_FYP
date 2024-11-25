@@ -40,7 +40,7 @@
 
         <div class="form-group">
           <label for="cat_id">Category <span class="text-danger">*</span></label>
-          <select name="cat_id" id="cat_id" class="form-control">
+          <select name="cat_id" id="cat_id" class="form-control" value="{{old('cat_id')}}" >
               <option value="">--Select any category--</option>
               @foreach($categories as $key=>$cat_data)
                   <option value='{{$cat_data->id}}'>{{$cat_data->title}}</option>
@@ -90,7 +90,7 @@
         </div>
 
         <div class="form-group">
-          <label for="condition">Condition</label>
+          <label for="condition">Condition <span class="text-danger">*</span></label>
           <select name="condition" class="form-control">
               <option value="">--Select Condition--</option>
               <option value="default">Default</option>

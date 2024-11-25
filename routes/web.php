@@ -1,5 +1,6 @@
 <?php
 
+    use App\Http\Controllers\Auth\RegisterController;
     use Illuminate\Support\Facades\Route;
     use Illuminate\Support\Facades\Artisan;
     use App\Http\Controllers\AdminController;
@@ -19,6 +20,8 @@
 
     use App\Http\Controllers\ProductController;
     use App\Http\Controllers\User\UserProductController;
+    use App\Http\Controllers\CategoryController;
+    use App\Http\Controllers\BrandController;
     /*
     |--------------------------------------------------------------------------
     | Web Routes
@@ -49,7 +52,9 @@
     Route::get('user/logout', [FrontendController::class, 'logout'])->name('user.logout');
 
     Route::get('user/register', [FrontendController::class, 'register'])->name('register.form');
-    Route::post('user/register', [FrontendController::class, 'registerSubmit'])->name('register.submit');
+    // Route::post('user/register', [FrontendController::class, 'registerUser'])->name('register.submit');
+    Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
+
 // Reset password
     Route::post('password-reset', [FrontendController::class, 'showResetForm'])->name('password.reset');
 // Socialite
@@ -133,13 +138,21 @@
         Route::resource('banner', 'BannerController');
         // Brand
         Route::resource('brand', 'BrandController');
+        // Ajax for brand dataTable view
+        Route::get('/brands', [BrandController::class, 'getBrandsData'])->name('admin.brands.data');
+
         // Profile
         Route::get('/profile', [AdminController::class, 'profile'])->name('admin-profile');
         Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('profile-update');
         // Category
         Route::resource('/category', 'CategoryController');
+        Route::get('/categories', [CategoryController::class, 'getCategoriesData'])->name('admin.categories.data');
+
         // Product
         Route::resource('product', ProductController::class);
+        // Ajax for Product dataTable view
+        Route::get('/products', [ProductController::class, 'getProductsData'])->name('admin.product.data');
+
         // Ajax for sub category
         Route::post('/category/{id}/child', 'CategoryController@getChildByParent');
         // POST category
@@ -198,6 +211,7 @@
         Route::get('change-password', [HomeController::class, 'changePassword'])->name('user.change.password.form');
         Route::post('change-password', [HomeController::class, 'changPasswordStore'])->name('change.password');
         Route::resource('product', UserProductController::class)->names('user.product');
+        Route::get('/products', [UserProductController::class, 'getProductsData'])->name('user.product.data');
 
     });
 

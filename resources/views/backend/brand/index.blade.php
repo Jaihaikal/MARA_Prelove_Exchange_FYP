@@ -15,71 +15,16 @@
     <div class="card-body">
       <div class="table-responsive">
         @if(count($brands)>0)
-        <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
+        <table id ="brands-table" class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th>S.N.</th>
-              <th>Title</th>
-              <th>Slug</th>
-              <th>Status</th>
-              <th>Action</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Status</th>
             </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <th>S.N.</th>
-              <th>Title</th>
-              <th>Slug</th>
-              <th>Status</th>
-              <th>Action</th>
-              </tr>
-          </tfoot>
-          <tbody>
-            @foreach($brands as $brand)   
-                <tr>
-                    <td>{{$brand->id}}</td>
-                    <td>{{$brand->title}}</td>
-                    <td>{{$brand->slug}}</td>
-                    <td>
-                        @if($brand->status=='active')
-                            <span class="badge badge-success">{{$brand->status}}</span>
-                        @else
-                            <span class="badge badge-warning">{{$brand->status}}</span>
-                        @endif
-                    </td>
-                    <td>
-                        <a href="{{route('brand.edit',$brand->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form method="POST" action="{{route('brand.destroy',[$brand->id])}}">
-                          @csrf 
-                          @method('delete')
-                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$brand->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                        </form>
-                    </td>
-                    {{-- Delete Modal --}}
-                    {{-- <div class="modal fade" id="delModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="#delModal{{$user->id}}Label" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="#delModal{{$user->id}}Label">Delete user</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <form method="post" action="{{ route('banners.destroy',$user->id) }}">
-                                @csrf 
-                                @method('delete')
-                                <button type="submit" class="btn btn-danger" style="margin:auto; text-align:center">Parmanent delete user</button>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                    </div> --}}
-                </tr>  
-            @endforeach
-          </tbody>
+        </thead>
         </table>
-        <span style="float:right">{{$brands->links()}}</span>
         @else
           <h6 class="text-center">No brands found!!! Please create brand</h6>
         @endif
@@ -92,9 +37,7 @@
   <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
   <style>
-      div.dataTables_wrapper div.dataTables_paginate{
-          display: none;
-      }
+      
       .zoom {
         transition: transform .2s; /* Animation */
       }
@@ -115,22 +58,20 @@
   <!-- Page level custom scripts -->
   <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
   <script>
-      
-      $('#banner-dataTable').DataTable( {
-            "columnDefs":[
-                {
-                    "orderable":false,
-                    "targets":[3,4]
-                }
-            ]
-        } );
-
-        // Sweet alert
-
-        function deleteData(id){
-            
-        }
-  </script>
+    $(document).ready(function () {
+        $('#brands-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('admin.brands.data') }}", // Replace with your route
+            columns: [
+                { data: 'id', name: 'id', title: 'ID' },
+                { data: 'title', name: 'title', title: 'Title' },
+                { data: 'slug', name: 'slug', title: 'Slug' },
+                { data: 'status', name: 'status', title: 'Status', orderable: false, searchable: false }
+            ],
+        });
+    });
+</script>
   <script>
       $(document).ready(function(){
         $.ajaxSetup({
