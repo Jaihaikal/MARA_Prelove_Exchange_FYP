@@ -65,6 +65,25 @@
             @endif
         </div>
     </div>
+    <section class="recommendations">
+        <h2>Recommended Products for You</h2>
+        
+        @if(empty($recommendations))
+    <p>No recommendations available at the moment.</p>
+@else
+    <div class="grid grid-cols-4 gap-4">
+        @foreach($recommendations as $product)
+            <div class="border p-4">
+                <h3>{{ $product->name }}</h3>
+                <img src="{{ $product->photo }}" alt="{{ $product->name }}" class="w-full h-48 object-cover">
+                <p>{{ $product->description }}</p>
+                <p><strong>Price:</strong> RM{{ number_format($product->price, 2) }}</p>
+                <a href="{{ route('products.show', $product->id) }}" class="text-blue-500">View Product</a>
+            </div>
+        @endforeach
+    </div>
+@endif
+    </section>
 </section>
 <!-- End Small Banner -->
 
@@ -119,7 +138,7 @@
                                                 @if($product->stock<=0)
                                                     <span class="out-of-stock">Sale out</span>
                                                 @elseif($product->condition=='new')
-                                                    <span class="new">New</span
+                                                    <span class="new">New</span>
                                                 @elseif($product->condition=='hot')
                                                     <span class="hot">Hot</span>
                                                 @else
@@ -131,7 +150,7 @@
                                             <div class="button-head">
                                                 <div class="product-action">
                                                     <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
-                                                    <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" ><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                    <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" ><i class="   "></i><span>Add to Wishlist</span></a>
                                                 </div>
                                                 <div class="product-action-2">
                                                     <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Add to cart</a>
@@ -159,10 +178,12 @@
 
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
 </div>
+
 <!-- End Product Area -->
 {{-- @php
     $featured=DB::table('products')->where('is_featured',1)->where('status','active')->orderBy('id','DESC')->limit(1)->get();

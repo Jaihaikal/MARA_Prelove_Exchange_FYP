@@ -89,7 +89,7 @@
 												<div>
 													<p class="description">{!!($product_detail->summary)!!}</p>
 													{{-- <p class="description">Product Summary <br>{!!($product_detail->summary)!!}</p> --}}
-													<p class="description">
+													<p class="description"> Seller: 
 														{!!($product_detail->user->name)!!}
 													</p>
 												</div>

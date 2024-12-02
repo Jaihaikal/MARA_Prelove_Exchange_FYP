@@ -2179,102 +2179,6 @@ Version:1.0
 /*======================================
    Start Shop Sidebar CSS
 ========================================*/
-/* Container Styles */
-
-/* Categories List */
-
-.single-widget.category {
-    background-color: #fff; /* Clean white background */
-    padding: 20px; /* Add internal spacing */
-    border-radius: 8px; /* Rounded corners */
-    border: 1px solid #ddd; /* Subtle border */
-    margin-bottom: 20px; /* Space below widget */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
-}
-
-/* Title Styles */
-.single-widget.category .title {
-    font-size: 18px; /* Larger font for emphasis */
-    font-weight: 600; /* Bold text */
-    color: #333; /* Darker color for contrast */
-    margin-bottom: 15px; /* Space below the title */
-    border-bottom: 2px solid #f0f0f0; /* Underline for separation */
-    padding-bottom: 5px; /* Space below the title */
-}
-
-/* List Styles */
-.single-widget.category .categor-list {
-    list-style: none; /* Remove bullet points */
-    margin: 0; /* Reset margin */
-    padding: 0; /* Reset padding */
-}
-
-.single-widget.category .categor-list li {
-    position: relative; /* For nested sub-lists */
-    padding: 8px 12px; /* Padding for clickable area */
-    background-color: #ffffff; /* Light gray background for items */
-    transition: all 0.3s ease; /* Smooth hover effect */
-}
-
-/* Hover Effect */
-.single-widget.category .categor-list li:hover {
-    background-color: #F7941D; /* Highlight background on hover */
-    border-color: #F7941D; /* Border matches background */
-	color: #fff; /* White text on hover */
-
-}
-
-/* Sub-Category Styles */
-
-/* dropdown */
-
-/* Style for the parent category */
-.categor-list .has-dropdown {
-    position: relative; /* Ensure the dropdown is positioned relative to the parent */
-}
-
-/* Hide subcategories by default */
-.categor-list .has-dropdown .sub-category {
-    display: none; /* Initially hidden */
-    position: absolute; /* Positioned relative to the parent */
-    top: 100%; /* Show below the parent */
-    left: 0;
-    background-color: #fff; /* White background for the dropdown */
-    padding: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for a dropdown effect */
-    z-index: 1000;
-    border: 1px solid #ddd; /* Add a border to distinguish the dropdown */
-}
-
-/* Show subcategories on hover */
-.categor-list .has-dropdown:hover .sub-category {
-    display: block; /* Show the dropdown */
-}
-
-/* Style individual subcategory items */
-.categor-list .sub-category li {
-    margin: 5px 0; /* Add spacing between items */
-}
-
-/* Subcategory links */
-.categor-list .sub-category li a {
-    color: #333; /* Dark text color for visibility */
-    background-color: #fff; /* White background for each item */
-    padding: 5px 10px; /* Add padding for better spacing */
-    border-radius: 4px; /* Optional: Rounded corners for items */
-    text-decoration: none; /* Remove underline */
-    display: block; /* Ensure full clickable area */
-    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
-}
-
-/* Subcategory hover effect */
-.categor-list .sub-category li a:hover {
-    color: #fff; /* White text color on hover */
-    background-color: #F7941D; /* Highlight background color */
-}
-
-
-
 /* General styling for single widgets */
 .single-widget {
     margin-bottom: 30px; /* Space between widgets */
@@ -2294,23 +2198,48 @@ Version:1.0
     margin-bottom: 15px;   /* Space before the widget content */
 }
 
-/* Price Filter */
-.single-widget.range {
-    background-color: #fff; /* Clean white background */
-    padding: 20px; /* Add internal spacing */
-    border-radius: 8px; /* Rounded corners */
-    border: 1px solid #ddd; /* Subtle border */
-    margin-bottom: 20px; /* Space below widget */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
-	
-	
+/* Categories List */
+.single-widget.category ul.categor-list {
+	list-style: none;      /* Remove bullet points */
+    margin: 0;             /* Reset margin */
+    padding: 0;            /* Reset padding */
+    border-radius: 6px;    /* Rounded corners for the border */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
 }
+
+
+.single-widget.category ul.categor-list li {
+    margin-bottom: 10px;   /* Space between items */
+    padding: 8px 10px;     /* Add padding to items */
+    transition: background-color 0.3s ease; /* Smooth hover effect for items */
+}
+
+
+.single-widget.category ul.categor-list li:hover {
+    background-color: #ffffff; /* Darker background when hovering over items */
+}
+
+/* Hover effect for category links */
+.single-widget.category ul.categor-list li a:hover {
+    color: #ff6f61;        /* Highlight on hover */
+    padding-left: 10px;    /* Indent further on hover */
+}
+
+/* Category links */
+.single-widget.category ul.categor-list li a {
+    font-size: 14px;       /* Font size for links */
+    color: #555;           /* Subtle text color */
+    text-decoration: none; /* Remove underline */
+    display: block;        /* Full clickable area */
+    padding-left: 5px;     /* Indent links slightly */
+    transition: color 0.3s ease, padding-left 0.3s ease; /* Hover effects */
+}
+
+/* Price Filter */
 .single-widget.range .price-filter {
     padding: 15px;         /* Add padding inside the price filter */
     background-color: #f9f9f9; /* Light background */
     border-radius: 6px;    /* Rounded corners */
-	
-	
 }
 
 .single-widget.range .filter_button {
@@ -2328,15 +2257,6 @@ Version:1.0
 }
 
 /* Recent Posts */
-.single-widget.recent-post {
-    background-color: #fff; /* Clean white background */
-    padding: 20px; /* Add internal spacing */
-    border-radius: 8px; /* Rounded corners */
-    border: 1px solid #ddd; /* Subtle border */
-    margin-bottom: 20px; /* Space below widget */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
-}
-
 .single-widget.recent-post .single-post {
     display: flex;          /* Side-by-side layout */
     align-items: center;    /* Center-align content */
@@ -2378,6 +2298,75 @@ Version:1.0
 .single-widget.recent-post .single-post .content .price del {
     color: #999;           /* Muted color for original price */
     margin-right: 5px;     /* Space between original and discounted prices */
+}
+
+/* Container Styles */
+.single-widget.category {
+    background-color: #f9f9f9; /* Light background */
+    padding: 20px; /* Space inside the widget */
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
+    margin-bottom: 20px; /* Space between widgets */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+}
+
+/* Title Styles */
+.single-widget.category .title {
+    font-size: 16px; /* Clean and readable font size */
+    font-weight: 600; /* Slightly bold */
+    color: #333; /* Dark text for contrast */
+    margin-bottom: 15px; /* Space below the title */
+    text-transform: uppercase; /* Add minimalistic emphasis */
+    border-bottom: 2px solid #ddd; /* Subtle underline */
+    padding-bottom: 5px; /* Padding below the title */
+}
+
+/* List Styles */
+.single-widget.category .categor-list {
+    list-style: none; /* Remove bullet points */
+    padding: 0; /* Reset padding */
+    margin: 0; /* Reset margin */
+}
+
+.single-widget.category .categor-list li {
+    margin-bottom: 10px; /* Space between list items */
+}
+
+.single-widget.category .categor-list li a {
+    display: block; /* Full clickable area */
+    font-size: 14px; /* Clean font size */
+    color: #555; /* Subtle text color */
+    text-decoration: none; /* Remove underline */
+    padding: 8px 12px; /* Add padding for spacing */
+    border: 1px solid #eee; /* Subtle border around links */
+    border-radius: 6px; /* Rounded corners for links */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effects */
+}
+
+/* Hover Styles */
+.single-widget.category .categor-list li a:hover {
+    background-color: #ff6f61; /* Highlight background on hover */
+    color: #fff; /* White text on hover */
+    border-color: #ff6f61; /* Border matches background */
+}
+
+.shop-sidebar .single-widget {
+	margin-top: 10;
+	background: #F6F7FB;
+	/* padding: 10; */
+}
+.shop-sidebar .single-widget:first-child {
+	margin-top: 0;
+}
+.shop-sidebar .single-widget .title {
+	position: relative;
+	font-size: 18px;
+	font-weight: 500;
+	text-transform: capitalize;
+	margin-bottom: 25px;
+	display: block;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 15px;
 }
 /* Shop Price */
 .shop .range .price-filter {
@@ -2454,40 +2443,67 @@ Version:1.0
 	color:#666;
 }
 /* Category List */
-	
-.shop-sidebar .categor-list li {
-	margin-bottom: 10px;
-}
-.shop-sidebar .categor-list li:last-child{
-	margin-bottom:0px;
-}
 
-.shop-sidebar .categor-list li {
-	margin-bottom: 10px;
-}
-.shop-sidebar .categor-list li:last-child{
-	margin-bottom:0px;
-}
-.shop-sidebar .categor-list li a {
-	display: inline-block;
-	color: #666;
-	font-weight: 400;
-	font-size: 14px;
-	text-transform: capitalize;
-}
-.shop-sidebar .categor-list li a:hover{
-	color:#ffffff;
-}
 /* Recent Post */
-
+.shop-sidebar .single-post {
+	position: relative;
+	margin-top: 30px;
+    padding-bottom: 30px;
+	border-bottom: 1px solid #ddd;
+}
+.shop-sidebar .single-post.first{
+	padding-top:0px;
+}
+.shop-sidebar .single-post:last-child{
+	padding-bottom:0px;
+	border:none;
+}
+.shop-sidebar .single-post .image img{
+	height: 80px;
+	width: 80px;
+	position:absolute;
+	left:0;
+	top:0;
+	border-radius:100%;
+}
+.shop-sidebar .single-post .content{
+	padding-left:100px;
+}
+.shop-sidebar .single-post .content h5 {
+	line-height: 18px;
+}
+.shop-sidebar .single-post .content h5 a {
+	color: #222;
+	font-weight: 500;
+	font-size: 14px;
+	font-weight: 500;
+	display: block;
+}
+.shop-sidebar .single-post .content h5 a:hover{
+	color:#F7941D;
+}
+.shop-sidebar .single-post .content .price {
+	display: block;
+	color: #333;
+	font-weight: 500;
+	margin: 5px 0 0px 0;
+	text-transform: uppercase;
+	font-size: 14px;
+}
+.shop-sidebar .single-post .reviews li{
+	display:inline-block;
+}
+.shop-sidebar .single-post .reviews li i{
+	color:#999;
+}
+.shop-sidebar .single-post .reviews li.yellow i{
+	color:#F7941D;
+}
 /* Shop Topbar */
 .shop .shop-top {
 	clear: both;
-	background: #ffffff;
+	background: #f6f7fb;
 	padding: 18px 20px 50px 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
-    border-radius: 8px; /* Rounded corners */
-    border: 1px solid #ddd; /* Subtle border */
 }
 .shop .shop-shorter {
 	float: left;
