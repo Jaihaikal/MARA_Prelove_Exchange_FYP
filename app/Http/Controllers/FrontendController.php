@@ -18,6 +18,10 @@ use Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
+
+use App\Services\CollaborativeFilteringService;
+use App\Models\UserProductInteraction;
+
 use App\Models\Faculty;
 class FrontendController extends Controller
 {
@@ -26,22 +30,38 @@ class FrontendController extends Controller
         return redirect()->route($request->user()->role);
     }
 
+    //collaborative filtering
+    protected $collaborativeFilteringService;
+
+    public function __construct(CollaborativeFilteringService $collaborativeFilteringService)
+    {
+        $this->collaborativeFilteringService = $collaborativeFilteringService;
+    }
+    
     public function home(){
+
         $featured=Product::where('status','active')->where('is_featured',1)->orderBy('price','DESC')->limit(2)->get();
         $posts=Post::where('status','active')->orderBy('id','DESC')->limit(3)->get();
         $banners=Banner::where('status','active')->limit(3)->orderBy('id','DESC')->get();
-        // return $banner;
         $products=Product::where('status','active')->orderBy('id','DESC')->limit(8)->get();
         $category=Category::where('status','active')->where('is_parent',1)->orderBy('title','ASC')->get();
-        // return $category;
+
+        $userId = auth()->id();
+        $recommendedProductIds = $this->collaborativeFilteringService->getRecommendations(auth()->id());
+
+        $recommendedProducts = Product::whereIn('id', $recommendedProductIds)
+        ->where('status', 'active')
+        ->get();
+
         return view('frontend.index')
                 ->with('featured',$featured)
                 ->with('posts',$posts)
                 ->with('banners',$banners)
                 ->with('product_lists',$products)
-                ->with('category_lists',$category);
-    }   
+                ->with('category_lists',$category)
+                ->with('recommended_products', $recommendedProducts);
 
+    }   
     public function aboutUs(){
         return view('frontend.pages.about-us');
     }
@@ -50,60 +70,90 @@ class FrontendController extends Controller
         return view('frontend.pages.contact');
     }
 
-    public function productDetail($slug){
-        $product_detail= Product::getProductBySlug($slug);
-        // dd($product_detail);
-        return view('frontend.pages.product_detail')->with('product_detail',$product_detail);
-    }
+    // In ProductController or a specific service
 
-    public function productGrids(){
-        $products=Product::query();
-        
-        if(!empty($_GET['category'])){
-            $slug=explode(',',$_GET['category']);
-            // dd($slug);
-            $cat_ids=Category::select('id')->whereIn('slug',$slug)->pluck('id')->toArray();
-            // dd($cat_ids);
-            $products->whereIn('cat_id',$cat_ids);
-            // return $products;
-        }
-        if(!empty($_GET['brand'])){
-            $slugs=explode(',',$_GET['brand']);
-            $brand_ids=Brand::select('id')->whereIn('slug',$slugs)->pluck('id')->toArray();
-            return $brand_ids;
-            $products->whereIn('brand_id',$brand_ids);
-        }
-        if(!empty($_GET['sortBy'])){
-            if($_GET['sortBy']=='title'){
-                $products=$products->where('status','active')->orderBy('title','ASC');
-            }
-            if($_GET['sortBy']=='price'){
-                $products=$products->orderBy('price','ASC');
-            }
-        }
-
-        if(!empty($_GET['price'])){
-            $price=explode('-',$_GET['price']);
-            // return $price;
-            // if(isset($price[0]) && is_numeric($price[0])) $price[0]=floor(Helper::base_amount($price[0]));
-            // if(isset($price[1]) && is_numeric($price[1])) $price[1]=ceil(Helper::base_amount($price[1]));
-            
-            $products->whereBetween('price',$price);
-        }
-
-        $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
-        // Sort by number
-        if(!empty($_GET['show'])){
-            $products=$products->where('status','active')->paginate($_GET['show']);
-        }
-        else{
-            $products=$products->where('status','active')->paginate(9);
-        }
-        // Sort by name , price, category
-
+    public function productDetail($slug)
+    {
       
-        return view('frontend.pages.product-grids')->with('products',$products)->with('recent_products',$recent_products);
+        $product_detail = Product::getProductBySlug($slug);
+        // dd($product_detail);
+
+        if (auth()->check()) { // Ensure the user is authenticated
+            UserProductInteraction::updateOrCreate(
+                [
+                    'user_id' => auth()->user()->id,
+                    'product_id' => $product_detail->id,
+                    'interaction' => 'view'
+                ],
+                [
+                    'weight' => DB::raw('weight + 1') // Increment the weight for repeated views
+                ]
+            );
+            // dd(DB::getQueryLog());
+
+        }
+
+        return view('frontend.pages.product_detail')->with('product_detail', $product_detail);
     }
+
+    public function productGrids()
+    {
+        // Base query
+        $products = Product::query()->where('status', 'active');
+        
+        // Filters
+        if (request()->has('category')) {
+            $slug = explode(',', request('category'));
+            $cat_ids = Category::whereIn('slug', $slug)->pluck('id');
+            $products->whereIn('cat_id', $cat_ids);
+        }
+    
+        if (request()->has('brand')) {
+            $slugs = explode(',', request('brand'));
+            $brand_ids = Brand::whereIn('slug', $slugs)->pluck('id');
+            $products->whereIn('brand_id', $brand_ids);
+        }
+    
+        if (request()->has('sortBy')) {
+            switch (request('sortBy')) {
+                case 'title':
+                    $products->orderBy('title', 'ASC');
+                    break;
+                case 'price':
+                    $products->orderBy('price', 'ASC');
+                    break;
+            }
+        }
+    
+        if (request()->has('price')) {
+            $price = explode('-', request('price'));
+            if (count($price) === 2 && is_numeric($price[0]) && is_numeric($price[1])) {
+                $products->whereBetween('price', [floor($price[0]), ceil($price[1])]);
+            }
+        }
+    
+        // Pagination
+        $perPage = request('show', 21);
+        $products = $products->paginate($perPage);
+    
+        // Recent products (only used for the initial load)
+        $recent_products = Product::where('status', 'active')
+            ->orderBy('id', 'DESC')
+            ->limit(3)
+            ->get();
+    
+        // Check if the request is AJAX
+        if (request()->ajax()) {
+            return response()->json([
+                'products' => view('frontend.partials.product-items', compact('products'))->render(),
+            ]);
+        }
+    
+        // Return the full view for non-AJAX requests
+        return view('frontend.pages.product-grids', compact('products', 'recent_products'));
+    }
+    
+    
     public function productLists(){
         $products=Product::query();
         
@@ -224,31 +274,36 @@ class FrontendController extends Controller
         }
 
     }
-    public function productCat(Request $request){
-        $products=Category::getProductByCat($request->slug);
-        // return $request->slug;
-        $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
-
-        if(request()->is('e-shop.loc/product-grids')){
-            return view('frontend.pages.product-grids')->with('products',$products->products)->with('recent_products',$recent_products);
-        }
-        else{
-            return view('frontend.pages.product-lists')->with('products',$products->products)->with('recent_products',$recent_products);
-        }
-
+    public function productCat(Request $request)
+    {
+        // Get products related to the category, and paginate them
+        $products = Category::getProductByCat($request->slug);
+    
+        // Paginate the products (if 'products' is a relationship, you can paginate it like this)
+        $paginatedProducts = $products->products()->paginate(9); // Assuming 'products' is a relationship
+    
+        // Fetch recent products
+        $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+    
+        return view('frontend.pages.product-grids')
+            ->with('products', $paginatedProducts)
+            ->with('recent_products', $recent_products);
     }
-    public function productSubCat(Request $request){
-        $products=Category::getProductBySubCat($request->sub_slug);
-        // return $products;
-        $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
 
-        if(request()->is('e-shop.loc/product-grids')){
-            return view('frontend.pages.product-grids')->with('products',$products->sub_products)->with('recent_products',$recent_products);
-        }
-        else{
-            return view('frontend.pages.product-lists')->with('products',$products->sub_products)->with('recent_products',$recent_products);
-        }
+    public function productSubCat(Request $request)
+    {
+        // Get the products related to the subcategory, and paginate them
+        $products = Category::getProductBySubCat($request->sub_slug);
 
+        // Check if sub_products is a relationship
+        $paginatedSubProducts = $products->sub_products()->paginate(9); // Assuming sub_products is a relationship
+
+        // Fetch recent products
+        $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+
+        return view('frontend.pages.product-grids')
+            ->with('products', $paginatedSubProducts)
+            ->with('recent_products', $recent_products);
     }
 
     public function blog(){
@@ -381,34 +436,56 @@ class FrontendController extends Controller
         $this->validate($request,[
             'name'=>'string|required|min:2',
             'email'=>'string|required|unique:users,email',
-            'password'=>'required|min:6|confirmed',
-            'phone' => 'required|string|max:255|unique:users',
-            'faculty_id' => 'string|required',
             'student_id' => 'string|required|unique:users,student_id',
+            'phone' => 'required|string|max:255|unique:users',
+            'password'=>'required|min:6|confirmed',
+            'faculty_id' => 'required|string',
         ]);
         $data=$request->all();
-        dd($data);
+        // dd($data);
         
         if ( $this->create($data)) {
             request()->session()->flash('success', 'Successfully registered');
             return redirect()->route('home');
         } else {
-            request()->session()->flash('error', 'Please try again!');
-            return redirect()->route('user.register');
+            request()->session()->flash('error', value: 'Please try again!');
+            return redirect()->route('register.form');
         }
-        // try {
-        //     $user = $this->create($data);
-        //     Session::put('user', $data['email']);
-        //     request()->session()->flash('success', 'Successfully registered');
-        //     return redirect()->route('home');
-        // } catch (\Exception $e) {
-        //     request()->session()->flash('error', 'Failed to register. Please try again.');
-        //     return redirect()->route('user.register')->withErrors(['message' => $e->getMessage()]);
-        // }
-
-        // $this->create($data);
-        // Session::put('user', $data['email']);
+ 
     }
+
+    public function registerUser(Request $request)
+    {
+        try{ 
+        
+            // Validate the incoming request data
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+                'student_id' => 'required|string|unique:users,student_id',
+                'phone' => 'required|string|max:255|unique:users',
+                'faculty_id' => 'required|string',
+            ]);
+
+            // Create a new user with the validated data
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request['phone'],
+                'faculty_id' => $request['faculty_id'],
+                'student_id' => $request['student_id'],
+                'status' => 'active',
+            ]);
+
+                return redirect()->route('home')->with('success', 'Registration successful! Welcome to the platform.');
+            } catch (\Exception $e) {
+                // Redirect back to the login page with an error message if registration fails
+                return redirect()->route('register.form')->with('error', 'Registration failed. Please try again.');
+            }
+        }
+
     public function create(array $data)
     {
         return User::create([
@@ -446,5 +523,4 @@ class FrontendController extends Controller
                 return back();
             }
     }
-    
 }

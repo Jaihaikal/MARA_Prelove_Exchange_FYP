@@ -7,6 +7,9 @@ use App\Models\Product;
 use App\Models\Wishlist;
 use App\Models\Cart;
 use Illuminate\Support\Str;
+use App\Models\UserProductInteraction;
+use Illuminate\Support\Facades\DB;
+
 use Helper;
 class CartController extends Controller
 {
@@ -50,6 +53,21 @@ class CartController extends Controller
             $cart->save();
             $wishlist=Wishlist::where('user_id',auth()->user()->id)->where('cart_id',null)->update(['cart_id'=>$cart->id]);
         }
+
+        if (auth()->check()) {
+            UserProductInteraction::updateOrCreate(
+                [
+                    'user_id' => auth()->user()->id,
+                    'product_id' => $product->id,
+                    'interaction' => 'add_to_cart'
+                ],
+                [
+                    'weight' => DB::raw('weight + 1') // Increment weight for repeated interactions
+                ]
+            );
+            
+        }
+
         request()->session()->flash('success','Product successfully added to cart');
         return back();       
     }  
