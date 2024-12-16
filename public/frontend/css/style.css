@@ -1918,6 +1918,7 @@ Version:1.0
 }
 .single-product .product-img .product-action-2 {
 	position: absolute;
+
 	left: 0;
 	bottom: 0;
 	text-align: left;
@@ -1927,6 +1928,7 @@ Version:1.0
 	transition: all 250ms ease-out;
 }
 .single-product .product-img .product-action-2 a {
+	margin-left: 12px;
 	display: block;
 	background-color: transparent;
 	color: #333;
@@ -2569,6 +2571,7 @@ Version:1.0
 ========================================*/
 .shop.single{
 	padding:70px 0 100px;
+	
 }
 .shop.single .product-gallery {
 	margin-top: 30px;
@@ -2618,7 +2621,6 @@ Version:1.0
 	padding-bottom: 20px;
 	border-bottom: 1px solid #eee;
 }
-.shop.single .product-des {}
 .shop.single .product-des .total-review{
 	font-size:14px;
 	font-weight:500;
@@ -2655,10 +2657,6 @@ Version:1.0
 	margin-right:15px;
 	color:#F7941D;
 }
-.shop.single .product-des .product-buy {
-	margin-top: 40px;
-}
-.shop.single .product-des .product-buy{}
 .shop.single .product-des .color {
 	display: inline-block;
 	margin-right: 50px;
@@ -2818,11 +2816,16 @@ Version:1.0
 	color: #fff;
 	display: inline-block;
 	font-weight: 500;
+    border-radius: 6px; /* Slightly rounded corners for a modern, subtle look */
+
 }
 .shop.single .add-to-cart .btn:hover{
 	color:#fff;
 	background:#F7941D;
 }
+
+
+
 .shop.single .add-to-cart .btn.min {
 	padding: 0 20px;
 	font-size: 17px;
@@ -2844,9 +2847,10 @@ Version:1.0
 	color:#F7941D;
 }
 .shop.single .availability{
+	font-size: 14px;
+	font-weight: 500;
 	color:#333;
-	font-size:14px;
-	margin-top:6px;
+	margin-top:30px;
 }
 /* Product Tab */
 .shop.single .product-info {
@@ -2870,6 +2874,8 @@ Version:1.0
 	font-weight: 500;
 	font-size: 14px;
 	border: 1px solid #eee;
+    border-radius: 6px; /* Slightly rounded corners for a modern, subtle look */
+
 }
 .shop.single .nav-tabs li a i{
 	margin-right:10px;

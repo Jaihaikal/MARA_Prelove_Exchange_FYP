@@ -9,28 +9,40 @@ use App\Models\Category;
 
 class ProductSeeder extends Seeder
 {
-    public function run()
-    {
-        $faker = \Faker\Factory::create();
+    public function run(): void
+{
+    $faker = \Faker\Factory::create();
+    
+    // Fetch all parent categories
+    $parentCategories = Category::where('is_parent', true)->get();
 
-        for ($i = 0; $i < 30; $i++) {
-            Product::create([
-                'title' => $faker->words(3, true),
-                'slug' => Str::slug($faker->unique()->words(3, true)),
-                'summary' => $faker->sentence,
-                'description' => $faker->paragraph,
-                'photo' => $faker->imageUrl(400, 400, 'product'),
-                'stock' => $faker->numberBetween(1, 10),
-                'condition' => $faker->randomElement(['default', 'new', 'used']),
-                'status' => $faker->randomElement(['active']),
-                'price' => $faker->randomFloat(2, 10, 1000), // Prices between $10 and $1000
-                'discount' => $faker->optional()->randomFloat(2, 0, 50), // Discount between 0% and 50%
-                'is_featured' => true, // 20% chance of being featured
-                'user_id' => $faker->numberBetween(1, 10), // Assuming user IDs from 1 to 10
-                'cat_id' => $faker->numberBetween(1, 3), // Assuming category IDs from 1 to 10
-                'child_cat_id' => $faker->numberBetween(4, 9), // Assuming sub-category IDs from 11 to 20
-                'brand_id' => $faker->optional()->numberBetween(1, 5), // Assuming brand IDs from 1 to 5
-            ]);
+    foreach ($parentCategories as $parent) {
+        // Fetch subcategories for each parent
+        $subCategories = Category::where('parent_id', $parent->id)->get();
+
+        foreach ($subCategories as $subCategory) {
+            // Create 20 products for each subcategory
+            for ($i = 1; $i <= 20; $i++) {
+                Product::create([
+                    'title' => 'Product - ' . $subCategory->title . ' ' . $i,
+                    'slug' => Str::slug('Product - ' . $subCategory->title . ' ' . $i),
+                    'summary' => $faker->sentence(),
+                    'description' => $faker->paragraph(),
+                    'cat_id' => $parent->id, // Parent category ID
+                    'child_cat_id' => $subCategory->id, // Subcategory ID
+                    'price' => $faker->numberBetween(50, 1000), // Random price between 50 and 1000
+                    'brand_id' => $faker->numberBetween(1, 10), // Assuming you have 10 brands
+                    'discount' => $faker->numberBetween(0, 50), // Random discount between 0 and 50
+                    'status' => 'active',
+                    'photo' => $faker->imageUrl(300, 300, 'product'), // Placeholder product image
+                    'stock' => $faker->numberBetween(1, 5), // Random stock between 1 and 5
+                    'is_featured' => true, // Always featured
+                    'condition' => $faker->randomElement(['new', 'used']), // Random condition
+                    'user_id' => $faker->numberBetween(1, 10),
+                ]);
+            }
         }
     }
+}
+
 }

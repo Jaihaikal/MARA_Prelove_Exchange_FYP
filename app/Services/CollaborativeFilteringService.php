@@ -11,7 +11,6 @@ class CollaborativeFilteringService
         if (!$userId) {
             return []; // Return an empty array if the user is not logged in
         }
-
         // Step 1: Fetch the products the user recently interacted with
         $recentlyInteractedProducts = DB::table('user_product_interactions')
             ->where('user_id', $userId)

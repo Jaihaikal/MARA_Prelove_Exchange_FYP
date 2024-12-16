@@ -38,7 +38,7 @@
 		<section class="shop single section">
 					<div class="container">
 						<div class="row"> 
-							<div class="col-12">
+							<div class="col-12" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); padding: 50px; background-color: #fff; ">
 								<div class="row">
 									<div class="col-lg-6 col-12">
 										<!-- Product Slider -->
@@ -65,8 +65,7 @@
 										<div class="product-des">
 											<!-- Description -->
 											<div class="short">
-												<h4>{{$product_detail->title}}</h4>
-
+												<h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #F7941D; padding-bottom: 5px; margin-top: 40px;">{{$product_detail->title}}</h4>
 												<div class="rating-main">
 													<ul class="rating">
 														@php
@@ -87,41 +86,11 @@
                                                 @endphp
 												<p class="price"><span class="discount">RM {{number_format($after_discount,2)}}</span><s>RM {{number_format($product_detail->price,2)}}</s> </p>
 												<div>
-													<p class="description">{!!($product_detail->summary)!!}</p>
-													{{-- <p class="description">Product Summary <br>{!!($product_detail->summary)!!}</p> --}}
-													<p class="description"> Seller: 
-														{!!($product_detail->user->name)!!}
-													</p>
+													{{-- <p class="description">{!!($product_detail->summary)!!}</p> --}}
+													<p class="description">Summary <br>{!!($product_detail->summary)!!}</p>
 												</div>
-												
 											</div>
-											<!--/ End Description -->
-											<!-- Color -->
-											{{-- <div class="color">
-												<h4>Available Options <span>Color</span></h4>
-												<ul>
-													<li><a href="#" class="one"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="two"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="three"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="four"><i class="ti-check"></i></a></li>
-												</ul>
-											</div> --}}
-											<!--/ End Color -->
-											<!-- Size -->
-											@if($product_detail->size)
-												<div class="size mt-4">
-													<h4>Size</h4>
-													<ul>
-														@php 
-															$sizes=explode(',',$product_detail->size);
-															// dd($sizes);
-														@endphp
-														@foreach($sizes as $size)
-														<li><a href="#" class="one">{{$size}}</a></li>
-														@endforeach
-													</ul>
-												</div>
-											@endif
+											
 											<!--/ End Size -->
 											<!-- Product Buy -->
 											<div class="product-buy">
@@ -156,7 +125,15 @@
 												@if($product_detail->sub_cat_info)
 												<p class="cat mt-1">Sub Category :<a href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}</a></p>
 												@endif
-												<p class="availability">Stock : @if($product_detail->stock>0)<span class="badge badge-success">{{$product_detail->stock}}</span>@else <span class="badge badge-danger">{{$product_detail->stock}}</span>  @endif</p>
+												<p class="availability" style="font-size: 14px; color: #333; margin: 5px 0;">
+													Stock: 
+													@if($product_detail->stock > 0)
+														<span style="color: #28a745; font-weight: bold;">{{$product_detail->stock}}</span>
+													@else
+														<span style="color: #dc3545; font-weight: bold;">Out of Stock</span>
+													@endif
+												</p>
+												
 											</div>
 											<!--/ End Product Buy -->
 										</div>
@@ -186,6 +163,7 @@
 														</div>
 													</div>
 												</div>
+												
 												<!--/ End Description Tab -->
 												<!-- Reviews Tab -->
 												<div class="tab-pane fade" id="reviews" role="tabpanel">
@@ -230,7 +208,7 @@
 																		<div class="col-lg-12 col-12">
 																			<div class="form-group">
 																				<label>Write a review</label>
-																				<textarea name="review" rows="6" placeholder="" ></textarea>
+																				<textarea style="border-radius: 8px; border: 1px solid #ddd; padding: 10px; font-size: 14px; width: 100%; box-sizing: border-box;" name="review" rows="6" placeholder="Enter your review..."></textarea>
 																			</div>
 																		</div>
 																		<div class="col-lg-12 col-12">
@@ -300,6 +278,19 @@
 													</div>
 												</div>
 												<!--/ End Reviews Tab -->
+												<div class="product-des">
+													<div class="short">
+														<div class="seller-details">
+															<h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #F7941D; padding-bottom: 5px; margin-top: 40px;">Seller Details</h4>
+															<p style="margin: 8px 0;"><strong>Name:</strong> {{ $product_detail->user->name }}</p>
+															<p style="margin: 8px 0;"><strong>Email:</strong> {{ $product_detail->user->email }}</p>
+															<p style="margin: 8px 0;"><strong>Phone:</strong> {{ $product_detail->user->phone ?? 'Not Provided' }}</p>
+															<p style="margin: 8px 0;"><strong>Student ID:</strong> {{ $product_detail->user->student_id ?? 'Not Provided' }}</p>
+															<p style="margin: 8px 0;"><strong>Faculty:</strong> {{ $product_detail->user->faculty_id ?? 'Not Provided' }}</p>
+														</div>
+													</div>
+												</div>
+												
 											</div>
 										</div>
 									</div>
@@ -309,6 +300,8 @@
 					</div>
 		</section>
 		<!--/ End Shop Single -->
+		
+		
 		
 		<!-- Start Most Popular -->
 	<div class="product-area most-popular related-product section">
@@ -448,7 +441,7 @@
                             </div>
                             <div class="quantity">
                                 <!-- Input Order -->
-                                <div class="input-group">
+                                <div class="input-group" style="border-padding">
                                     <div class="button minus">
                                         <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
                                             <i class="ti-minus"></i>
@@ -533,43 +526,12 @@
 		.star-rating__input:checked ~ .star-rating__ico:before {
 		content: "\F005";
 		}
+		
 
 	</style>
 @endpush
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=$('#quantity').val();
-            var pro_id=$(this).data('id');
-            // alert(quantity);
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-					else{
-                        swal('error',response.msg,'error').then(function(){
-							document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-    </script> --}}
-
+    
 @endpush

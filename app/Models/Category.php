@@ -49,4 +49,10 @@ class Category extends Model
         }
         return 0;
     }
+
+    public function brands()
+    {
+        return $this->hasMany(Brand::class);
+    }
+
 }

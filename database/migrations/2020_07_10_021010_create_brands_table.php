@@ -18,7 +18,11 @@ class CreateBrandsTable extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->enum('status',['active','inactive'])->default('active');
+            $table->unsignedBigInteger('category_id'); // Foreign key to categories table
             $table->timestamps();
+
+            // Add the foreign key constraint
+        $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

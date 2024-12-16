@@ -184,7 +184,7 @@
                                                             class="wishlist" data-id="{{ $product->id }}"><i
                                                                 class=" ti-heart "></i><span>Add to Wishlist</span></a>
                                                     </div>
-                                                    <div class="ml-4 product-action-2">
+                                                    <div class="product-action-2">
                                                         <a title="Add to cart"
                                                             href="{{ route('add-to-cart', $product->slug) }}">Add to
                                                             cart</a>
