@@ -11,6 +11,7 @@ use App\Models\Cart;
 use App\Models\Brand;
 use App\User;
 use Auth;
+use PayPal;
 use Session;
 use Newsletter;
 use DB;
@@ -31,37 +32,45 @@ class FrontendController extends Controller
     }
 
     //collaborative filtering
-    protected $collaborativeFilteringService;
+    protected $cfService;
 
-    public function __construct(CollaborativeFilteringService $collaborativeFilteringService)
+    public function __construct(CollaborativeFilteringService $cfService)
     {
-        $this->collaborativeFilteringService = $collaborativeFilteringService;
+        $this->cfService = $cfService;
     }
-    
-    public function home(){
 
-        $featured=Product::where('status','active')->where('is_featured',1)->orderBy('price','DESC')->limit(2)->get();
-        $posts=Post::where('status','active')->orderBy('id','DESC')->limit(3)->get();
-        $banners=Banner::where('status','active')->limit(3)->orderBy('id','DESC')->get();
-        $products=Product::where('status','active')->orderBy('id','DESC')->limit(8)->get();
-        $category=Category::where('status','active')->where('is_parent',1)->orderBy('title','ASC')->get();
+    public function home()
+    {
 
-        $userId = auth()->id();
-        $recommendedProductIds = $this->collaborativeFilteringService->getRecommendations(auth()->id());
+        $featured = Product::where('status', 'active')->where('is_featured', 1)->orderBy('price', 'DESC')->limit(2)->get();
+        $posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+        $banners = Banner::where('status', 'active')->limit(3)->orderBy('id', 'DESC')->get();
+        $products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(8)->get();
+        $category = Category::where('status', 'active')->where('is_parent', 1)->orderBy('title', 'ASC')->get();
 
-        $recommendedProducts = Product::whereIn('id', $recommendedProductIds)
-        ->where('status', 'active')
-        ->get();
+        $userId = Auth::id();
+
+        $recommended_products = collect(); // Initialize as an empty collection
+
+        if ($userId) {
+            $matrix = $this->cfService->getUserProductMatrix();
+            $similarities = $this->cfService->calculateUserSimilarity($matrix);
+            $recommendedProductIds = $this->cfService->getRecommendations($userId, $matrix, $similarities);
+
+            // Fetch recommended products from the database
+            $recommended_products = Product::whereIn('id', $recommendedProductIds)->get();
+        }
 
         return view('frontend.index')
-                ->with('featured',$featured)
-                ->with('posts',$posts)
-                ->with('banners',$banners)
-                ->with('product_lists',$products)
-                ->with('category_lists',$category)
-                ->with('recommended_products', $recommendedProducts);
+            ->with('featured', $featured)
+            ->with('posts', $posts)
+            ->with('banners', $banners)
+            ->with('product_lists', $products)
+            ->with('category_lists', $category)
+            ->with('recommended_products', $recommended_products);
 
-    }   
+    }
+
     public function aboutUs(){
         return view('frontend.pages.about-us');
     }
@@ -92,7 +101,6 @@ class FrontendController extends Controller
             // dd(DB::getQueryLog());
 
         }
-
         return view('frontend.pages.product_detail')->with('product_detail', $product_detail);
     }
 
@@ -266,13 +274,12 @@ class FrontendController extends Controller
     public function productBrand(Request $request){
         $products=Brand::getProductByBrand($request->slug);
         $recent_products=Product::where('status','active')->orderBy('id','DESC')->limit(3)->get();
-        if(request()->is('e-shop.loc/product-grids')){
-            return view('frontend.pages.product-grids')->with('products',$products->products)->with('recent_products',$recent_products);
+        if ($products) {
+            return view('frontend.pages.product-grids')
+                ->with('products', $products) // Paginated products
+                ->with('recent_products', $recent_products);
         }
-        else{
-            return view('frontend.pages.product-lists')->with('products',$products->products)->with('recent_products',$recent_products);
-        }
-
+        return redirect()->back()->with('error', 'Brand not found.');
     }
     public function productCat(Request $request)
     {
@@ -506,6 +513,14 @@ class FrontendController extends Controller
         return view('auth.passwords.old-reset');
     }
 
+    public function SellerDetails(User $user)
+    {
+        // Fetch the seller's products
+        $products = $user->products; // This uses the relationship defined in User model
+
+        return view('seller.show', compact('user', 'products'));
+    }
+
     public function subscribe(Request $request){
         if(! Newsletter::isSubscribed($request->email)){
                 Newsletter::subscribePending($request->email);
@@ -523,4 +538,52 @@ class FrontendController extends Controller
                 return back();
             }
     }
+
+    public function showProfile($id)
+    {
+        // Fetch the user
+        $user = User::findOrFail($id);
+
+        // Fetch the user's products
+        $products = Product::where('user_id', $id)
+        ->where('status', 'active')
+        ->paginate(12); // Add pagination here
+
+        $products ->appends(request()->query());
+        // Return the view
+        return view('frontend.pages.user-profile', compact('user', 'products'));
+    }
+
+
+
+    public function filter(Request $request)
+{
+    $query = Product::query();
+
+    // Apply filters based on the received request
+    if ($request->has('price_range')) {
+        $priceRange = explode(',', $request->price_range);
+        $query->whereBetween('price', [$priceRange[0], $priceRange[1]]);
+    }
+
+    if ($request->has('sortBy')) {
+        $sortBy = $request->sortBy;
+        if ($sortBy == 'price') {
+            $query->orderBy('price');
+        } elseif ($sortBy == 'title') {
+            $query->orderBy('title');
+        } elseif ($sortBy == 'category') {
+            $query->orderBy('category_id');  // Assuming category is a foreign key
+        } elseif ($sortBy == 'brand') {
+            $query->orderBy('brand_id');  // Assuming brand is a foreign key
+        }
+    }
+
+    // Get filtered products
+    $products = $query->get();
+
+    // Return only the product grid partial to be replaced
+    return view('partials.product-grid', compact('products'));
+}
+
 }

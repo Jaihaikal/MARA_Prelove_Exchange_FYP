@@ -76,8 +76,8 @@ class CategorySeeder extends Seeder
                     'title' => $parent->title . ' - Subcategory ' . $j,
                     'slug' => Str::slug($parent->title . ' - Subcategory ' . $j),
                     'summary' => 'This is the summary for ' . $parent->title . ' - Subcategory ' . $j,
-                    'photo' => $faker->imageUrl(200, 200, 'business'),
-
+                    // 'photo' => $faker->imageUrl(200, 200, 'business'),
+                    'photo' => '/storage/photos/1/Products/ProductDummyjpg.jpg',
                     'status' => 'active',
                     'is_parent' => false,
                     'parent_id' => $parent->id,

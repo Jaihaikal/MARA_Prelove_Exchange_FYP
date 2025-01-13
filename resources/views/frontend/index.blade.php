@@ -9,9 +9,8 @@
                     <li data-target="#Gslider" data-slide-to="{{ $key }}" class="{{ $key == 0 ? 'active' : '' }}">
                     </li>
                 @endforeach
-
             </ol>
-            {{-- <div class="carousel-inner" role="listbox">
+            <div class="carousel-inner" role="listbox">
                 @foreach ($banners as $key => $banner)
                 <div class="carousel-item {{(($key==0)? 'active' : '')}}">
                     <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
@@ -22,7 +21,7 @@
                     </div>
                 </div>
             @endforeach
-        </div> --}}
+        </div>
             <a class="carousel-control-prev" href="#Gslider" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
@@ -45,22 +44,24 @@
                 @endphp
                 @if ($category_lists)
                     @foreach ($category_lists as $cat)
-                        @if ($cat->is_parent == 1)
-                            <!-- Single Banner  -->
-                            <div class="col-lg-4 col-md-6 col-12">
-                                <div class="single-banner">
-                                    @if ($cat->photo)
-                                        <img src="{{ $cat->photo }}" alt="{{ $cat->photo }}">
-                                    @else
-                                        <img src="https://via.placeholder.com/600x370" alt="#">
-                                    @endif
-                                    <div class="content">
-                                        <h3>{{ $cat->title }}</h3>
-                                        <a href="{{ route('product-cat', $cat->slug) }}">Discover Now</a>
-                                    </div>
-                                </div>
+                    @if ($cat->is_parent == 1)
+                    <!-- Single Banner -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="single-banner">
+                            <div style="width: 100%; padding-top: 100%; position: relative; overflow: hidden; background-color: #f4f4f4;">
+                                @if ($cat->photo)
+                                    <img src="{{ $cat->photo }}" alt="{{ $cat->title }}" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
+                                @else
+                                    <img src="https://via.placeholder.com/600x600" alt="Placeholder Image" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
+                                @endif
                             </div>
-                        @endif
+                            <div class="content">
+                                <h3>{{ $cat->title }}</h3>
+                                <a href="{{ route('product-cat', $cat->slug) }}">Discover Now</a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                         <!-- /End Single Banner  -->
                     @endforeach
                 @endif
@@ -90,10 +91,16 @@
                                             <div class="product-img">
                                                 <a href="{{ route('product-detail', $product->slug) }}">
                                                     @php
-                                                        $photo = explode(',', $product->photo);
+                                                        $photo = $product->photo ? explode(',', $product->photo) : [];
                                                     @endphp
-                                                    <img class="default-img" src="{{ $photo[0] }}" alt="{{ $photo[0] }}">
-                                                    <img class="hover-img" src="{{ $photo[0] }}" alt="{{ $photo[0] }}">
+                                                    <div class="image-wrapper">
+                                                        @if (!empty($photo[0]))
+                                                            <img class="product-image" src="{{ $photo[0] }}"
+                                                                alt="Product Image">
+                                                        @else
+                                                            <div class="blank-frame"></div>
+                                                        @endif
+                                                    </div>
                                                     @if ($product->stock <= 0)
                                                         <span class="out-of-stock">Sale out</span>
                                                     @elseif($product->condition == 'new')
@@ -188,13 +195,16 @@
                                             <div class="product-img">
                                                 <a href="{{ route('product-detail', $product->slug) }}">
                                                     @php
-                                                        $photo = explode(',', $product->photo);
-                                                        // dd($photo);
+                                                        $photo = $product->photo ? explode(',', $product->photo) : [];
                                                     @endphp
-                                                    <img class="default-img" src="{{ $photo[0] }}"
-                                                        alt="{{ $photo[0] }}">
-                                                    <img class="hover-img" src="{{ $photo[0] }}"
-                                                        alt="{{ $photo[0] }}">
+                                                    <div class="image-wrapper">
+                                                        @if (!empty($photo[0]))
+                                                            <img class="product-image" src="{{ $photo[0] }}"
+                                                                alt="Product Image">
+                                                        @else
+                                                            <div class="blank-frame"></div>
+                                                        @endif
+                                                    </div>
                                                     @if ($product->stock <= 0)
                                                         <span class="out-of-stock">Sale out</span>
                                                     @elseif($product->condition == 'new')

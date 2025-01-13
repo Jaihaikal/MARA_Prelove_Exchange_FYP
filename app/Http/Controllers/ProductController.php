@@ -28,7 +28,7 @@ class ProductController extends Controller
     public function getProductsData(Request $request)
     {
         $query = Product::with(['cat_info', 'sub_cat_info']);
-     
+
         return DataTables::of($query)
             ->addColumn('category', function ($product) {
                 $category = $product->cat_info ? $product->cat_info->title : 'N/A';
@@ -54,10 +54,14 @@ class ProductController extends Controller
                     <a href="' . route('product.edit', $product->id) . '" class="btn btn-sm btn-primary" style="margin: 5px;" title="Edit">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <a href="' . route('product.destroy', $product->id) . '" class="btn btn-sm btn-danger" style="margin: 5px;" title="Delete">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>
-                ';
+                    <form method="POST" action="' . route('product.destroy', $product->id) . '" style="display: inline;" class="deleteForm">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button type="button" class="btn btn-danger btn-sm dltBtn" data-name="' . $product->title . '" style="margin: 5px; height:30px; width:30px; border-radius:50%;" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    ';
             })
 
             //filter search
@@ -182,8 +186,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $category = Category::where('is_parent', 1)->get();
         $items = Product::where('id', $id)->get();
-        // return $items;
-        return view('backend.product.edit')->with('product', $product)
+
+        return view('backend.product.edit')//+
+            ->with('product', $product)//+
             ->with('brands', $brand)
             ->with('categories', $category)
             ->with('items', $items);
@@ -260,6 +265,7 @@ class ProductController extends Controller
         }
         return redirect()->route('product.index');
     }
+
 
 
 }

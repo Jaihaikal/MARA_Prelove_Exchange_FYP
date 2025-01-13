@@ -19,11 +19,14 @@ class Brand extends Model
         return $this->hasMany('App\Models\Product','brand_id','id')->where('status','active');
     }
     public static function getProductByBrand($slug){
-        // dd($slug);
-        return Brand::with('products')->where('slug',$slug)->first();
-        // return Product::where('cat_id',$id)->where('child_cat_id',null)->paginate(10);
-    }
+        $brand = Brand::where('slug', $slug)->first();
 
+        if ($brand) {
+            // Paginate the products for the brand
+            return $brand->products()->where('status', 'active')->paginate(12); // Adjust the pagination size as needed
+        }
+        return null;
+    }
     public function category()
 {
     return $this->belongsTo(Category::class);

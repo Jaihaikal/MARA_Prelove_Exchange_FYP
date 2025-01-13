@@ -43,9 +43,14 @@ class CategoryController extends Controller
                     <a href="' . route('category.edit', $category->id) . '" class="btn btn-sm btn-primary">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <a href="' . route('category.destroy', $category->id) . '" class="btn btn-sm btn-danger">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>';
+                    <form method="POST" action="' . route('category.destroy', $category->id) . '" style="display: inline;">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button class="btn btn-danger btn-sm dltBtn" style="margin: 5px; height:30px; width:30px; border-radius:50%;" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+    ';
             })
             ->rawColumns(['photo', 'status', 'action'])
             ->make(true);

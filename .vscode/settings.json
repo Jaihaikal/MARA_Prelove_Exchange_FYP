@@ -1,4 +1,5 @@
 {
     "editor.fontSize": 12,
-    "window.zoomPerWindow": true
+    "window.zoomPerWindow": true,
+    "liveServer.settings.multiRootWorkspaceName": "Complete-Ecommerce-in-laravel-10"
 }

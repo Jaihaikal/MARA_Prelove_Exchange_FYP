@@ -133,6 +133,7 @@
                                     </div>
                                 </div>
                             @endauth
+
                             <!--/ End Shopping Item -->
                         </div>
                         {{-- <div class="sinlge-bar">
@@ -171,6 +172,9 @@
                                 </div>
                             @endauth
                             <!--/ End Shopping Item -->
+                        </div>
+                        <div class="sinlge-bar shopping">
+                            <a href="{{route('chat.index')}}" class="single-icon"><i class="fas fa-comment"></i> <span class="total-count">{{Helper::cartCount()}}</span></a>
                         </div>
                     </div>
                 </div>

@@ -68,61 +68,99 @@
     <!-- Page-level custom scripts -->
     <script src="{{ asset('backend/js/demo/datatables-demo.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
- 
+
     <script>
         $(document).ready(function() {
             $('#products-table').DataTable({
                 processing: true,
                 serverSide: true, // Enable server-side mode
                 ajax: "{{ route('admin.product.data') }}", // Using the custom route
-                columns: [
-                    {data: 'id',name: 'id',title: 'S.N.',orderable: true},
-                    {data: 'title',name: 'title',title: 'Title',orderable: true},
-                    {data: 'category',name: 'category',title: 'Category - Sub-category', orderable: true},
-                    {data: 'price',name: 'price',title: 'Price', orderable: true},
-                    {data: 'discount',name: 'discount',title: 'Discount',orderable: true},
-                    {data: 'condition',name: 'condition',title: 'Condition',orderable: true},
-                    {data: 'add_by',name: 'add_by',title: 'Add By', orderable: true},
-                    {data: 'stock',name: 'stock',title: 'Stock',orderable: true},
-                    {data: 'photo',name: 'photo',title: 'Photo',orderable: false, searchable: false},
-                    {data: 'status',name: 'status',title: 'Status',orderable: true},
-                    {data: 'action',name: 'action',orderable: false, searchable: false,title: 'Action'}
+                columns: [{
+                        data: 'id',
+                        name: 'id',
+                        title: 'S.N.',
+                        orderable: true
+                    },
+                    {
+                        data: 'title',
+                        name: 'title',
+                        title: 'Title',
+                        orderable: true
+                    },
+                    {
+                        data: 'category',
+                        name: 'category',
+                        title: 'Category - Sub-category',
+                        orderable: true
+                    },
+                    {
+                        data: 'price',
+                        name: 'price',
+                        title: 'Price',
+                        orderable: true
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount',
+                        title: 'Discount',
+                        orderable: true
+                    },
+                    {
+                        data: 'condition',
+                        name: 'condition',
+                        title: 'Condition',
+                        orderable: true
+                    },
+                    {
+                        data: 'add_by',
+                        name: 'add_by',
+                        title: 'Add By',
+                        orderable: true
+                    },
+                    {
+                        data: 'stock',
+                        name: 'stock',
+                        title: 'Stock',
+                        orderable: true
+                    },
+                    {
+                        data: 'photo',
+                        name: 'photo',
+                        title: 'Photo',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        title: 'Status',
+                        orderable: true
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        title: 'Action'
+                    }
                 ],
                 pageLength: 10, // Set page length to 10
                 lengthMenu: [10, 25, 50, 100], // Dropdown for page sizes
                 paging: true, // Enables pagination (default is true)
-                info: true, 
+                info: true,
 
             });
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $('.dltBtn').click(function(e) {
-                var form = $(this).closest('form');
-                var dataID = $(this).data('id');
-                // alert(dataID);
-                e.preventDefault();
-                swal({
-                        title: "Are you sure?",
-                        text: "Once deleted, you will not be able to recover this data!",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
-                            form.submit();
-                        } else {
-                            swal("Your data is safe!");
-                        }
-                    });
-            })
-        })
+
+        $(document).on('click', '.dltBtn', function(e) {
+            e.preventDefault(); // Prevent default button behavior
+
+            let form = $(this).closest('form'); // Get the form element
+            let productName = $(this).data('name'); // Get the product name from data-name attribute
+
+            if (confirm(`Are you sure you want to delete '${productName}'?`)) {
+                form.submit(); // Submit the form if confirmed
+            }
+        });
     </script>
 @endpush

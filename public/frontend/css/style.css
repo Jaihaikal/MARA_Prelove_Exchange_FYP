@@ -1746,7 +1746,7 @@ Version:1.0
 }
 /* Sinlge Product */
 .single-product{
-	margin-top:50px;
+	margin-top:10px;
 }
 .single-product .product-img {
   position: relative;
@@ -1994,7 +1994,7 @@ Version:1.0
   line-height: 50px;
 }
 .single-product .product-content{
-	margin-top:20px;
+	margin-top:5px;
 }
 .single-product .product-img:hover.default-overlay::before {
   background-color: rgba(38, 38, 38, 0.2);
@@ -5181,6 +5181,101 @@ Version:1.0
 	color:#fff;
 	text-decoration:underline;
 }
+/* Ensures the image wrapper always has a 1:1 aspect ratio */
+.image-wrapper {
+    width: 100%;
+    padding-top: 100%; /* This creates a square aspect ratio */
+    position: relative;
+    overflow: hidden;
+    background-color: #f5f5f5; /* Light grey background for blank frame */
+    border: 1px solid #ddd; /* Optional: Add a border for blank frame */
+}
+
+/* Styles for the product image */
+.product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the entire square */
+    display: block;
+}
+
+/* Styles for the blank frame when there is no image */
+.blank-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5; /* Matches the wrapper background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #aaa; /* Light grey text */
+}
+
+/* Optional: Add placeholder text or icon */
+.blank-frame::after {
+    content: "No Image";
+    font-style: italic;
+}
+
+.pagination {
+	display: inline-flex;
+}
+
+ul.pagination {
+	display: flex;
+	gap: 8px;
+	/* Space between buttons */
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+/* Pagination Links */
+ul.pagination li a {
+	display: inline-block;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	/* Light border */
+	border-radius: 4px;
+	text-decoration: none;
+	color: #333;
+	/* Neutral text color */
+	font-size: 14px;
+	transition: all 0.2s ease;
+}
+
+/* Active Pagination Link */
+ul.pagination li.active span {
+	background-color: #F7941D;
+	/* Highlight color */
+	color: white;
+	border: 1px solid #F7941D;
+	border-radius: 4px;
+	padding: 8px 12px;
+}
+
+/* Hover State for Links */
+ul.pagination li a:hover {
+	background-color: #f0f0f0;
+	/* Subtle hover effect */
+	border-color: #F7941D;
+	color: #F7941D;
+}
+
+/* Disable Links */
+ul.pagination li.disabled span {
+	color: #999;
+	/* Light gray for disabled links */
+	cursor: not-allowed;
+}
+
+
 /*=============================
 	End Footer CSS
 ===============================*/

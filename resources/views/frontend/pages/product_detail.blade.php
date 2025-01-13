@@ -16,7 +16,6 @@
 @endsection
 @section('title','E-SHOP || PRODUCT DETAIL')
 @section('main-content')
-
 		<!-- Breadcrumbs -->
 		<div class="breadcrumbs">
 			<div class="container">
@@ -47,12 +46,13 @@
 											<div class="flexslider-thumbnails">
 												<ul class="slides">
 													@php 
-														$photo=explode(',',$product_detail->photo);
-													// dd($photo);
+														$photo = explode(',', $product_detail->photo);
 													@endphp
 													@foreach($photo as $data)
-														<li data-thumb="{{$data}}" rel="adjustX:10, adjustY:">
-															<img src="{{$data}}" alt="{{$data}}">
+														<li data-thumb="{{ $data }}" rel="adjustX:10, adjustY:">
+															<div style="width: 100%; padding-top: 100%; position: relative; overflow: hidden; background-color: #f4f4f4;">
+																<img src="{{ $data }}" alt="Product Image" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
+															</div>
 														</li>
 													@endforeach
 												</ul>
@@ -282,11 +282,28 @@
 													<div class="short">
 														<div class="seller-details">
 															<h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #F7941D; padding-bottom: 5px; margin-top: 40px;">Seller Details</h4>
-															<p style="margin: 8px 0;"><strong>Name:</strong> {{ $product_detail->user->name }}</p>
+															<p style="margin: 8px 0;">
+																<strong>Name:</strong> 
+																<a href="{{ route('user-profile', $product_detail->user->id) }}" style="color: #F7941D; text-decoration: none;">
+																	{{ $product_detail->user->name }}
+																</a>
+																
+															</p>
 															<p style="margin: 8px 0;"><strong>Email:</strong> {{ $product_detail->user->email }}</p>
 															<p style="margin: 8px 0;"><strong>Phone:</strong> {{ $product_detail->user->phone ?? 'Not Provided' }}</p>
 															<p style="margin: 8px 0;"><strong>Student ID:</strong> {{ $product_detail->user->student_id ?? 'Not Provided' }}</p>
 															<p style="margin: 8px 0;"><strong>Faculty:</strong> {{ $product_detail->user->faculty_id ?? 'Not Provided' }}</p>
+															{{-- <form action="{{ route('chat.start', $product_detail->id) }}" method="POST" style="display: inline;">
+																@csrf
+																<button type="submit" class="btn btn-success">Chat with Seller</button>
+															</form> --}}
+
+															<form method="GET" action="{{ route('chats.index') }}">
+																<input type="hidden" name="product_id" value="{{ $product_detail->id }}">
+																<button type="submit">Chat with Seller</button>
+															</form>
+															
+															
 														</div>
 													</div>
 												</div>
@@ -322,15 +339,16 @@
                                 <!-- Start Single Product -->
                                 <div class="single-product">
                                     <div class="product-img">
-										<a href="{{route('product-detail',$data->slug)}}">
+										<a href="{{ route('product-detail', $data->slug) }}">
 											@php 
-												$photo=explode(',',$data->photo);
+												$photo = explode(',', $data->photo);
 											@endphp
-                                            <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                            <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                            <span class="price-dec">{{$data->discount}} % Off</span>
-                                                                    {{-- <span class="out-of-stock">Hot</span> --}}
-                                        </a>
+											<div style="width: 100%; padding-top: 100%; position: relative; overflow: hidden; background-color: #f4f4f4;">
+												<img class="default-img" src="{{ $photo[0] }}" alt="{{ $photo[0] }}" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
+											</div>
+											<span class="price-dec">{{ $data->discount }} % Off</span>
+										</a>
+										
                                         <div class="button-head">
                                             <div class="product-action">
                                                 <a data-toggle="modal" data-target="#modelExample" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
@@ -460,8 +478,11 @@
                                 <a href="#" class="btn">Add to cart</a>
                                 <a href="#" class="btn min"><i class="ti-heart"></i></a>
                                 <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
+								
                             </div>
-                            <div class="default-social">
+							
+							
+                            {{-- <div class="default-social">
                                 <h4 class="share-now">Share:</h4>
                                 <ul>
                                     <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
@@ -469,7 +490,7 @@
                                     <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
                                     <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -533,5 +554,5 @@
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
-    
+
 @endpush

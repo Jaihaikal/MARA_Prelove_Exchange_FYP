@@ -23,7 +23,7 @@
     <!-- Product Style -->
     <form action="{{ route('shop.filter') }}" method="POST">
         @csrf<section class="product-area shop-sidebar shop section">
-        
+
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 col-md-4 col-12">
@@ -38,11 +38,14 @@
                                     @if ($menu)
                                         @foreach ($menu as $cat_info)
                                             <li class="has-dropdown">
-                                                <a href="{{ route('product-cat', $cat_info->slug) }}">{{ $cat_info->title }}</a>
+                                                <a
+                                                    href="{{ route('product-cat', $cat_info->slug) }}">{{ $cat_info->title }}</a>
                                                 @if ($cat_info->child_cat->count() > 0)
                                                     <ul class="sub-category">
                                                         @foreach ($cat_info->child_cat as $sub_menu)
-                                                            <li><a href="{{ route('product-sub-cat', [$cat_info->slug, $sub_menu->slug]) }}">{{ $sub_menu->title }}</a></li>
+                                                            <li><a
+                                                                    href="{{ route('product-sub-cat', [$cat_info->slug, $sub_menu->slug]) }}">{{ $sub_menu->title }}</a>
+                                                            </li>
                                                         @endforeach
                                                     </ul>
                                                 @endif
@@ -50,7 +53,7 @@
                                         @endforeach
                                     @endif
                                 </ul>
-                                
+
                             </div>
                             <!--/ End Single Widget -->
                             <!-- Shop By Price -->
@@ -164,12 +167,16 @@
                                             <div class="product-img">
                                                 <a href="{{ route('product-detail', $product->slug) }}">
                                                     @php
-                                                        $photo = explode(',', $product->photo);
+                                                        $photo = $product->photo ? explode(',', $product->photo) : [];
                                                     @endphp
-                                                    <img class="default-img" src="{{ $photo[0] }}"
-                                                        alt="{{ $photo[0] }}">
-                                                    <img class="hover-img" src="{{ $photo[0] }}"
-                                                        alt="{{ $photo[0] }}">
+                                                    <div class="image-wrapper">
+                                                        @if (!empty($photo[0]))
+                                                            <img class="product-image" src="{{ $photo[0] }}"
+                                                                alt="Product Image">
+                                                        @else
+                                                            <div class="blank-frame"></div>
+                                                        @endif
+                                                    </div>
                                                     @if ($product->discount)
                                                         <span class="price-dec">{{ $product->discount }} % Off</span>
                                                     @endif
@@ -192,14 +199,18 @@
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
+                                                <h3><a
+                                                        href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
+                                                </h3>
                                                 @php
-                                                    $after_discount = $product->price - ($product->price * $product->discount) / 100;
+                                                    $after_discount =
+                                                        $product->price - ($product->price * $product->discount) / 100;
                                                 @endphp
                                                 <span>${{ number_format($after_discount, 2) }}</span>
-                                            
-                                                @if($product->discount && $product->discount > 0)
-                                                    <del style="padding-left:4%;">${{ number_format($product->price, 2) }}</del>
+
+                                                @if ($product->discount && $product->discount > 0)
+                                                    <del
+                                                        style="padding-left:4%;">${{ number_format($product->price, 2) }}</del>
                                                 @endif
                                             </div>
                                         </div>
@@ -306,34 +317,36 @@
                                         </div>
                                         <div class="quickview-peragraph">
                                             <p><strong>Username:</strong> {{ $product->user->name ?? 'N/A' }}</p>
-                                            <p><strong>ID:</strong> {{ $product->user->student_id }}</p                                        </div>
-                                        @if ($product->size)
-                                            <div class="size">
-                                                <h4>Size</h4>
-                                                <ul>
-                                                    @php
-                                                        $sizes = explode(',', $product->size);
-                                                        // dd($sizes);
-                                                    @endphp
-                                                    @foreach ($sizes as $size)
-                                                        <li><a href="#" class="one">{{ $size }}</a></li>
-                                                    @endforeach
-                                                </ul>
+                                            <p><strong>ID:</strong> {{ $product->user->student_id }}</p </div>
+                                            @if ($product->size)
+                                                <div class="size">
+                                                    <h4>Size</h4>
+                                                    <ul>
+                                                        @php
+                                                            $sizes = explode(',', $product->size);
+                                                            // dd($sizes);
+                                                        @endphp
+                                                        @foreach ($sizes as $size)
+                                                            <li><a href="#" class="one">{{ $size }}</a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+
+                                            <form action="{{ route('single-add-to-cart') }}" method="POST">
+                                                @csrf
+
+                                                <div class="add-to-cart mt-4">
+                                                    <button type="submit" class="btn">Add to cart</button>
+                                                    <a href="{{ route('add-to-wishlist', $product->slug) }}"
+                                                        class="btn min"><i class="ti-heart"></i></a>
+                                                </div>
+                                            </form>
+                                            <div class="default-social">
+                                                <!-- ShareThis BEGIN -->
+                                                <div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
                                             </div>
-                                        @endif
-                                       
-                                        <form action="{{ route('single-add-to-cart') }}" method="POST">
-                                            @csrf
-                                           
-                                            <div class="add-to-cart mt-4">
-                                                <button type="submit" class="btn">Add to cart</button>
-                                                <a href="{{ route('add-to-wishlist', $product->slug) }}"
-                                                    class="btn min"><i class="ti-heart"></i></a>
-                                            </div>
-                                        </form>
-                                        <div class="default-social">
-                                            <!-- ShareThis BEGIN -->
-                                            <div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
                                         </div>
                                     </div>
                                 </div>
@@ -341,7 +354,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
         @endforeach
     @endif
     <!-- Modal end -->
@@ -349,8 +361,6 @@
 @endsection
 @push('styles')
     <style>
-        
-
         .filter_button {
             /* height:20px; */
             text-align: center;
@@ -364,6 +374,7 @@
         .pagination {
             display: inline-flex;
         }
+
         ul.pagination {
             display: flex;
             gap: 8px;
@@ -413,29 +424,38 @@
         }
 
         .single-product {
-    border: 1px solid #e0e0e0; /* Subtle border */
-    border-radius: 8px;       /* Rounded corners */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    overflow: hidden;        /* Ensures no overflow with rounded corners */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation for hover */
-    background-color: #fff; /* Optional: White background */
-}
+            border: 1px solid #e0e0e0;
+            /* Subtle border */
+            border-radius: 8px;
+            /* Rounded corners */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
+            overflow: hidden;
+            /* Ensures no overflow with rounded corners */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Animation for hover */
+            background-color: #fff;
+            /* Optional: White background */
+        }
 
-.single-product:hover {
-    transform: translateY(-5px); /* Slight lift effect on hover */
-    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
-}
+        .single-product:hover {
+            transform: translateY(-5px);
+            /* Slight lift effect on hover */
+            box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+            /* Increase shadow on hover */
+        }
 
-.single-product .product-img img {
-    border-radius: 8px 8px 0 0; /* Round top corners for images */
-}
+        .single-product .product-img img {
+            border-radius: 8px 8px 0 0;
+            /* Round top corners for images */
+        }
 
-.product-content {
-    padding: 15px; /* Add padding for content */
-    text-align: center; /* Center-align content (optional) */
-}
-
-
+        .product-content {
+            padding: 15px;
+            /* Add padding for content */
+            text-align: center;
+            /* Center-align content (optional) */
+        }
     </style>
 @endpush
 @push('scripts')

@@ -1,84 +1,108 @@
 <?php
 
 namespace App\Services;
+use App\Models\UserProductInteraction;
 
 use Illuminate\Support\Facades\DB;
 
 class CollaborativeFilteringService
 {
-    public function getRecommendations($userId)
+    // Step 1: Build the user-product matrix
+    public function getUserProductMatrix()
     {
-        if (!$userId) {
-            return []; // Return an empty array if the user is not logged in
-        }
-        // Step 1: Fetch the products the user recently interacted with
-        $recentlyInteractedProducts = DB::table('user_product_interactions')
-            ->where('user_id', $userId)
-            ->orderBy('created_at', 'DESC')
-            ->limit(10)
-            ->pluck('product_id');
+        $interactions = UserProductInteraction::all();
 
-        if ($recentlyInteractedProducts->isEmpty()) {
-            return []; // No recommendations if the user has no recent interactions
+        // Create a matrix [user_id][product_id] = weight
+        $matrix = [];
+        foreach ($interactions as $interaction) {
+            $matrix[$interaction->user_id][$interaction->product_id] = $interaction->weight;
         }
 
-        // Step 2: Get the categories of these products
-        $relatedCategories = DB::table('products')
-            ->whereIn('id', $recentlyInteractedProducts)
-            ->pluck('cat_id');
-
-        if ($relatedCategories->isEmpty()) {
-            return []; // No recommendations if the products have no categories
-        }
-
-        // Step 3: Fetch products from the same categories that the user has not interacted with recently
-        $recommendedProducts = DB::table('products')
-            ->whereIn('cat_id', $relatedCategories)
-            ->whereNotIn('id', $recentlyInteractedProducts) // Exclude products the user already interacted with
-            ->where('status', 'active') // Ensure the product is active
-            ->orderBy('created_at', 'DESC') // Prioritize recently added products
-            ->limit(8)
-            ->pluck('id');
-
-        return $recommendedProducts;
+        return $matrix;
     }
-// public function getRecommendations($userId)
-//     {
-//         // Step 1: Get current user interactions
-//         $currentUserInteractions = DB::table('user_product_interactions')
-//             ->where('user_id', $userId)
-//             ->pluck('weight', 'product_id');
 
-//         if ($currentUserInteractions->isEmpty()) {
-//             return []; // No recommendations if user has no data
-//         }
+    // Step 2: Calculate similarity between users
+    public function calculateUserSimilarity($matrix)
+    {
+        $similarities = [];
 
-//         // Step 2: Find similar users
-//         $similarUsers = DB::table('user_product_interactions')
-//             ->whereIn('product_id', $currentUserInteractions->keys())
-//             ->where('user_id', '!=', $userId)
-//             ->select('user_id', DB::raw('COUNT(*) as common_products'))
-//             ->groupBy('user_id')
-//             ->orderByDesc('common_products')
-//             ->limit(10)
-//             ->pluck('user_id');
+        $userIds = array_keys($matrix);
 
-//         if ($similarUsers->isEmpty()) {
-//             return []; // No recommendations if no similar users
-//         }
+        foreach ($userIds as $userA) {
+            foreach ($userIds as $userB) {
+                if ($userA !== $userB) {
+                    $similarities[$userA][$userB] = $this->cosineSimilarity(
+                        $matrix[$userA] ?? [],
+                        $matrix[$userB] ?? []
+                    );
+                }
+            }
+        }
 
-//         // Step 3: Recommend products based on similar users' interactions
-//         $recommendedProducts = DB::table('user_product_interactions')
-//             ->whereIn('user_id', $similarUsers)
-//             ->whereNotIn('product_id', $currentUserInteractions->keys())
-//             ->select('product_id', DB::raw('AVG(weight) as avg_weight'))
-//             ->groupBy('product_id')
-//             ->orderByDesc('avg_weight')
-//             ->limit(10)
-//             ->pluck('product_id');
+        return $similarities;
+    }
 
-//         return $recommendedProducts;
-//     }
+    // Cosine similarity function
+    private function cosineSimilarity($vectorA, $vectorB)
+    {
+        $dotProduct = 0;
+        $magnitudeA = 0;
+        $magnitudeB = 0;
+
+        // Calculate dot product and magnitudes
+        $allKeys = array_unique(array_merge(array_keys($vectorA), array_keys($vectorB)));
+        foreach ($allKeys as $key) {
+            $valA = $vectorA[$key] ?? 0;
+            $valB = $vectorB[$key] ?? 0;
+
+            $dotProduct += $valA * $valB;
+            $magnitudeA += $valA ** 2;
+            $magnitudeB += $valB ** 2;
+        }
+
+        // Avoid division by zero
+        if ($magnitudeA == 0 || $magnitudeB == 0) {
+            return 0;
+        }
+
+        return $dotProduct / (sqrt($magnitudeA) * sqrt($magnitudeB));
+    }
+
+    // Step 3: Generate recommendations
+    public function getRecommendations($userId, $matrix, $similarities)
+    {
+        $recommendations = [];
+
+        // Get the target user's existing products
+        $userProducts = $matrix[$userId] ?? [];
+
+        // Find similar users
+        $similarUsers = $similarities[$userId] ?? [];
+
+        // Sort similar users by similarity score (descending)
+        arsort($similarUsers);
+
+        // Generate recommendations
+        foreach ($similarUsers as $similarUserId => $similarityScore) {
+            if ($similarityScore > 0) {
+                // Get products of the similar user
+                $similarUserProducts = $matrix[$similarUserId] ?? [];
+
+                foreach ($similarUserProducts as $productId => $weight) {
+                    // Exclude products the target user has already interacted with
+                    if (!isset($userProducts[$productId])) {
+                        // Add to recommendations with a score based on similarity and weight
+                        $recommendations[$productId] = ($recommendations[$productId] ?? 0) + ($similarityScore * $weight);
+                    }
+                }
+            }
+        }
+
+        // Sort recommendations by score (descending)
+        arsort($recommendations);
+
+        return array_keys($recommendations); // Return product IDs
+    }
 }
 
 

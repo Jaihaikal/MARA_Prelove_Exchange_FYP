@@ -22,6 +22,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\User\UserProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatMessageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -60,7 +62,6 @@ Route::post('password-reset', [FrontendController::class, 'showResetForm'])->nam
 // Socialite
 Route::get('login/{provider}/', [LoginController::class, 'redirect'])->name('login.redirect');
 Route::get('login/{provider}/callback/', [LoginController::class, 'Callback'])->name('login.callback');
-
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 
 // Frontend Routes
@@ -73,6 +74,8 @@ Route::post('/product/search', [FrontendController::class, 'productSearch'])->na
 Route::get('/product-cat/{slug}', [FrontendController::class, 'productCat'])->name('product-cat');
 Route::get('/product-sub-cat/{slug}/{sub_slug}', [FrontendController::class, 'productSubCat'])->name('product-sub-cat');
 Route::get('/product-brand/{slug}', [FrontendController::class, 'productBrand'])->name('product-brand');
+Route::post('/shop/filter', [FrontendController::class, 'filter'])->name('shop.filter');
+// Route::get('/user/{id}', [FrontendController::class, 'showProfile'])->name('user-profile');
 
 // Route::get('/shop/filter', [ProductController::class, 'filterProducts'])->name('shop.filter');
 
@@ -155,6 +158,8 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::resource('product', ProductController::class);
     // Ajax for Product dataTable view
     Route::get('/products', [ProductController::class, 'getProductsData'])->name('admin.product.data');
+    Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+
 
     // Ajax for sub category
     Route::post('/category/{id}/child', 'CategoryController@getChildByParent');
@@ -223,3 +228,20 @@ Route::group(['prefix' => 'user', 'middleware' => ['user']], function () {
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     Lfm::routes();
 });
+
+Route::get('/user/{id}', [FrontendController::class, 'showProfile'])->name('user-profile');
+Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+Route::get('/chat/{product}', [ChatController::class, 'show'])->name('chat.show');
+Route::post('/chat/{product}/start', [ChatController::class, 'startChat'])->name('chat.start');
+Route::post('/chat-messages', [ChatMessageController::class, 'store'])->name('chat-messages.store');
+Route::get('/chat-messages', [ChatMessageController::class, 'fetch'])->name('chat-messages.fetch');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/chats', [ChatController::class, 'index']); // Fetch all chats
+    Route::get('/chats/{id}', [ChatController::class, 'show']); // Fetch a specific chat
+    Route::post('/chats/{id}/messages', [ChatController::class, 'storeMessage']); // Send a message
+});
+
+
+
