@@ -284,7 +284,7 @@
 															<h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #F7941D; padding-bottom: 5px; margin-top: 40px;">Seller Details</h4>
 															<p style="margin: 8px 0;">
 																<strong>Name:</strong> 
-																<a href="{{ route('user-profile', $product_detail->user->id) }}" style="color: #F7941D; text-decoration: none;">
+																<a href="{{ route('seller-profile', $product_detail->user->id) }}" style="color: #F7941D; text-decoration: none;">
 																	{{ $product_detail->user->name }}
 																</a>
 																
@@ -298,12 +298,13 @@
 																<button type="submit" class="btn btn-success">Chat with Seller</button>
 															</form> --}}
 
-															<form method="GET" action="{{ route('chats.index') }}">
+															{{-- <form method="POST" action="{{ route('chat.create') }}">
+																@csrf
 																<input type="hidden" name="product_id" value="{{ $product_detail->id }}">
+																<input type="hidden" name="receiver_id" value="{{ $product_detail->user->id }}">  <!-- Assuming the seller is the product's user -->
 																<button type="submit">Chat with Seller</button>
 															</form>
-															
-															
+															 --}}
 														</div>
 													</div>
 												</div>

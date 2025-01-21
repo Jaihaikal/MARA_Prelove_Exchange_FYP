@@ -12,16 +12,17 @@
             </ol>
             <div class="carousel-inner" role="listbox">
                 @foreach ($banners as $key => $banner)
-                <div class="carousel-item {{(($key==0)? 'active' : '')}}">
-                    <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
-                    <div class="carousel-caption d-none d-md-block text-left">
-                        <h1 class="wow fadeInDown">{{$banner->title}}</h1>
-                        <p>{!! html_entity_decode($banner->description) !!}</p>
-                        <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{route('product-grids')}}" role="button">Shop Now<i class="far fa-arrow-alt-circle-right"></i></i></a>
+                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                        <img class="first-slide" src="{{ $banner->photo }}" alt="First slide">
+                        <div class="carousel-caption d-none d-md-block text-left">
+                            <h1 class="wow fadeInDown">{{ $banner->title }}</h1>
+                            <p>{!! html_entity_decode($banner->description) !!}</p>
+                            <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{ route('product-grids') }}"
+                                role="button">Shop Now<i class="far fa-arrow-alt-circle-right"></i></i></a>
+                        </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
             <a class="carousel-control-prev" href="#Gslider" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
@@ -44,24 +45,28 @@
                 @endphp
                 @if ($category_lists)
                     @foreach ($category_lists as $cat)
-                    @if ($cat->is_parent == 1)
-                    <!-- Single Banner -->
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="single-banner">
-                            <div style="width: 100%; padding-top: 100%; position: relative; overflow: hidden; background-color: #f4f4f4;">
-                                @if ($cat->photo)
-                                    <img src="{{ $cat->photo }}" alt="{{ $cat->title }}" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
-                                @else
-                                    <img src="https://via.placeholder.com/600x600" alt="Placeholder Image" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
-                                @endif
+                        @if ($cat->is_parent == 1)
+                            <!-- Single Banner -->
+                            <div class="col-lg-4 col-md-6 col-12">
+                                <div class="single-banner">
+                                    <div
+                                        style="width: 100%; padding-top: 50%; position: relative; overflow: hidden; background-color: #f4f4f4;">
+                                        @if ($cat->photo)
+                                            <img src="{{ $cat->photo }}" alt="{{ $cat->title }}"
+                                                style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); filter: brightness(50%);">
+                                        @else
+                                            <img src="https://via.placeholder.com/600x600" alt="Placeholder Image"
+                                                style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); filter: brightness(50%);">
+                                        @endif
+                                    </div>
+                                    <div class="content" style= "color: white;">
+                                        <h3 style="color: white;">{{ $cat->title }}</h3>
+                                        <a href="{{ route('product-cat', $cat->slug) }}" style="color: white;">Discover
+                                            Now</a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="content">
-                                <h3>{{ $cat->title }}</h3>
-                                <a href="{{ route('product-cat', $cat->slug) }}">Discover Now</a>
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                        @endif
                         <!-- /End Single Banner  -->
                     @endforeach
                 @endif
@@ -120,7 +125,8 @@
                                                     </div>
                                                     <div class="product-action-2">
                                                         <a title="Add to cart"
-                                                            href="{{ route('add-to-cart', $product->slug) }}">Add to cart</a>
+                                                            href="{{ route('add-to-cart', $product->slug) }}">Add to
+                                                            cart</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,7 +137,8 @@
                                                 <div class="product-price">
                                                     @php
                                                         $after_discount =
-                                                            $product->price - ($product->price * $product->discount) / 100;
+                                                            $product->price -
+                                                            ($product->price * $product->discount) / 100;
                                                     @endphp
                                                     <span>RM {{ number_format($after_discount, 2) }}</span>
                                                     <del style="padding-left:4%;">RM
@@ -144,7 +151,7 @@
                             @endif
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -276,14 +283,15 @@
                                 @php
                                     $photo = explode(',', $data->photo);
                                 @endphp
-                                <img src="{{ $photo[0] }}" alt="{{ $photo[0] }}">
-                                <div class="content">
-                                    <h3>{{ $data->title }} <br>Up to<span> {{ $data->discount }}%</span></h3>
-                                    <a href="{{ route('product-detail', $data->slug) }}">Shop Now</a>
+                                <div style="width: 100%; padding-top: 50%; position: relative; overflow: hidden;">
+                                    <img src="{{ $photo[0] }}" alt="{{ $photo[0] }}" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%); filter: brightness(50%);">
+                                    <div class="content" >
+                                        <h3 style="color: white;">{{ $data->title }} <br>Up to<span> {{ $data->discount }}%</span></h3>
+                                        <a href="{{ route('product-detail', $data->slug) }}" style="color: white;">Shop Now</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- /End Single Banner  -->
                     @endforeach
                 @endif
             </div>
@@ -296,7 +304,7 @@
     <!-- End Most Popular Area -->
 
     <!-- Start Shop Home List  -->
-    
+
     <!-- End Shop Home List  -->
 
     <!-- Start Shop Blog  -->
@@ -555,7 +563,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
         /*==================================================================
-            [ Isotope ]*/
+                [ Isotope ]*/
         var $topeContainer = $('.isotope-grid');
         var $filter = $('.filter-tope-group');
 

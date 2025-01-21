@@ -2,7 +2,7 @@
 
 namespace App\Services;
 use App\Models\UserProductInteraction;
-
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class CollaborativeFilteringService
@@ -19,6 +19,16 @@ class CollaborativeFilteringService
         }
 
         return $matrix;
+    }
+
+    // Step 2: Calculate similarity between products
+    public function calculateProductSimilarity($productA, $productB)
+    {
+        $categorySimilarity = $productA->cat_id == $productB->cat_id ? 1 : 0;
+        $priceDifference = abs($productA->price - $productB->price);
+        $priceSimilarity = 1 / (1 + $priceDifference);
+
+        return ($categorySimilarity + $priceSimilarity) / 2;
     }
 
     // Step 2: Calculate similarity between users
@@ -69,40 +79,39 @@ class CollaborativeFilteringService
     }
 
     // Step 3: Generate recommendations
-    public function getRecommendations($userId, $matrix, $similarities)
-    {
-        $recommendations = [];
+    public function getRecommendations($userId, $matrix)
+{
+    $recommendations = [];
 
-        // Get the target user's existing products
-        $userProducts = $matrix[$userId] ?? [];
+    // Get the target user's existing products
+    $userProducts = $matrix[$userId] ?? [];
 
-        // Find similar users
-        $similarUsers = $similarities[$userId] ?? [];
+    // Fetch details of products the user has interacted with
+    $userProductIds = array_keys($userProducts);
+    $userProductDetails = Product::whereIn('id', $userProductIds)->get();
 
-        // Sort similar users by similarity score (descending)
-        arsort($similarUsers);
+    // Fetch all products
+    $allProducts = Product::all();
 
-        // Generate recommendations
-        foreach ($similarUsers as $similarUserId => $similarityScore) {
-            if ($similarityScore > 0) {
-                // Get products of the similar user
-                $similarUserProducts = $matrix[$similarUserId] ?? [];
-
-                foreach ($similarUserProducts as $productId => $weight) {
-                    // Exclude products the target user has already interacted with
-                    if (!isset($userProducts[$productId])) {
-                        // Add to recommendations with a score based on similarity and weight
-                        $recommendations[$productId] = ($recommendations[$productId] ?? 0) + ($similarityScore * $weight);
-                    }
-                }
+    // Calculate similarity and generate recommendations
+    foreach ($allProducts as $product) {
+        if (!isset($userProducts[$product->id])) {
+            $similarityScore = 0;
+            foreach ($userProductDetails as $userProduct) {
+                $similarityScore += $this->calculateProductSimilarity($userProduct, $product);
+            }
+            if (count($userProductDetails) > 0) {
+                $recommendations[$product->id] = $similarityScore / count($userProductDetails);
             }
         }
-
-        // Sort recommendations by score (descending)
-        arsort($recommendations);
-
-        return array_keys($recommendations); // Return product IDs
     }
+
+    // Sort recommendations by score (descending)
+    arsort($recommendations);
+
+    // Limit the number of recommendations to 8
+    return array_slice(array_keys($recommendations), 0, 8);
+}
 }
 
 

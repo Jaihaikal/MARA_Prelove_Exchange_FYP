@@ -21,7 +21,7 @@
     <!-- End Breadcrumbs -->
 
     <!-- Product Style -->
-    <form action="{{ route('shop.filter') }}" method="POST">
+    <form id="shop-filter-form" action="{{ route('shop.filter') }}" method="POST">
         @csrf<section class="product-area shop-sidebar shop section">
 
             <div class="container">
@@ -66,9 +66,9 @@
                                             // dd($max);
                                         @endphp
                                         <div id="slider-range" data-min="0" data-max="{{ $max }}"></div>
-                                        <div class="product_filter">
-                                            <button type="submit" class="filter_button">Filter</button>
-                                            <div class="label-input">
+                                        <div class="product_filter" style="margin-top: 10px;">
+                                            <button type="submit" class="filter_button" style="margin-top: 10px;">Filter</button>
+                                            <div class="label-input" style="margin-top: 10px;">
                                                 <span>Range:</span>
                                                 <input style="" type="text" id="amount" readonly />
                                                 <input type="hidden" name="price_range" id="price_range"
@@ -90,7 +90,7 @@
                                     @endphp
                                     <div class="single-post first">
                                         <div class="image">
-                                            <img src="{{ $photo[0] }}" alt="{{ $photo[0] }}">
+                                            <img src="{{ $photo[0] }}" alt="{{ $photo[0] }}" >
                                         </div>
                                         <div class="content">
                                             <h5><a
@@ -149,16 +149,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    {{-- <ul class="view-mode">
-                                        <li class="active"><a href="javascript:void(0)"><i class="fa fa-th-large"></i></a>
-                                        </li>
-                                        <li><a href="{{ route('product-lists') }}"><i class="fa fa-th-list"></i></a></li>
-                                    </ul> --}}
+                                
                                 </div>
                                 <!--/ End Shop Top -->
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" id="product-grid">
                             {{-- {{$products}} --}}
                             @if (count($products) > 0)
                                 @foreach ($products as $product)
@@ -361,15 +357,7 @@
 @endsection
 @push('styles')
     <style>
-        .filter_button {
-            /* height:20px; */
-            text-align: center;
-            background: #F7941D;
-            padding: 8px 16px;
-            margin-top: 10px;
-            color: white;
-        }
-
+        
         /* Pagination Container */
         .pagination {
             display: inline-flex;
@@ -460,37 +448,7 @@
 @endpush
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=1;
-            var pro_id=$(this).data('id');
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-                    else{
-                        swal('error',response.msg,'error').then(function(){
-							// document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-    </script> --}}
+    
     <script>
         $(document).ready(function() {
             /*----------------------------------------------------*/
@@ -523,27 +481,5 @@
                     "  -  " + m_currency + $("#slider-range").slider("values", 1));
             }
         })
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            // Handle filter or sorting changes
-            $('.filter, .sortBy').on('change', function() {
-                let filterData = $('#filterForm').serialize(); // Collect all form data
-
-                $.ajax({
-                    url: "{{ route('shop.filter') }}", // Endpoint defined in your routes
-                    type: "GET",
-                    data: filterData,
-                    success: function(response) {
-                        // Replace the product grid with the new content
-                        $('#productGrid').html(response.products);
-                    },
-                    error: function() {
-                        alert('Something went wrong. Please try again.');
-                    }
-                });
-            });
-        });
     </script>
 @endpush

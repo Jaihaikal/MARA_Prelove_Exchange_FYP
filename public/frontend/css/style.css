@@ -2309,15 +2309,14 @@ Version:1.0
 }
 .single-widget.range .price-filter {
     padding: 15px;         /* Add padding inside the price filter */
-    background-color: #f9f9f9; /* Light background */
+    background-color: #ffffff; /* Light background */
     border-radius: 6px;    /* Rounded corners */
-	
 	
 }
 
 .single-widget.range .filter_button {
     background-color: #ff6f61; /* Button color */
-    color: #fff;               /* White text */
+    color: #ffffff;               /* White text */
     border: none;              /* No border */
     padding: 8px 15px;         /* Add padding */
     border-radius: 4px;        /* Rounded button */
@@ -2347,11 +2346,20 @@ Version:1.0
     padding-bottom: 10px;   /* Space below each post */
 }
 
+.single-widget.recent-post .single-post .image {
+    width: 70px;           /* Fixed size for the circular frame */
+    height: 70px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border-radius: 50%;    /* Make the frame circular */
+}
+
 .single-widget.recent-post .single-post .image img {
-    width: 60px;           /* Fixed thumbnail size */
-    height: 60px;
-    object-fit: cover;     /* Ensure images are cropped properly */
-    border-radius: 6px;    /* Rounded corners for thumbnails */
+    width: 100%;           /* Ensure the image covers the frame */
+    height: 100%;
+    object-fit: cover;     /* Ensure the image fits within the frame without distortion */
+    border-radius: 50%;    /* Make the image circular */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
@@ -3680,11 +3688,12 @@ Version:1.0
 	height: 45px;
 	line-height: 50px;
 	padding: 0 20px;
-	border-radius: 3px;
 	border-radius: 0px;
 	color:#333 !important;
-	border: none;
-	background:#F6F7FB;
+	background-color: rgb(255, 255, 255);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
 }
 .shop.login .form .form-group label {
 	color: #333;

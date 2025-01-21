@@ -40,7 +40,7 @@ class ProductSeeder extends Seeder
                         'brand_id' => $faker->numberBetween(1, 10), // Assuming you have 10 brands
                         'discount' => $faker->numberBetween(0, 50), // Random discount between 0 and 50
                         'status' => 'active',
-                        'photo' => '/storage/photos/1/Products/ProductDummyjpg.jpg', // Store as comma-separated string
+                        'photo' => '/storage/photos/1/Products/ProductDummy.jpg', // Store as comma-separated string
                         'stock' => $faker->numberBetween(1, 5), // Random stock between 1 and 5
                         'is_featured' => true, // Always featured
                         'condition' => $faker->randomElement(['new', 'used']), // Random condition

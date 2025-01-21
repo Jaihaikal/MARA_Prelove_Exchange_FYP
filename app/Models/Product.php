@@ -20,7 +20,6 @@ class Product extends Model
         'discount',
         'status',
         'photo',
-        // 'size',
         'stock',
         'is_featured',
         'condition',

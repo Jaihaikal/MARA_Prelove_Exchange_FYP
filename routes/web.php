@@ -23,7 +23,6 @@ use App\Http\Controllers\User\UserProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ChatMessageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,7 +44,6 @@ Route::get('cache-clear', function () {
 
 // STORAGE LINKED ROUTE
 Route::get('storage-link', [AdminController::class, 'storageLink'])->name('storage.link');
-
 
 Auth::routes(['register' => false]);
 
@@ -75,24 +73,19 @@ Route::get('/product-cat/{slug}', [FrontendController::class, 'productCat'])->na
 Route::get('/product-sub-cat/{slug}/{sub_slug}', [FrontendController::class, 'productSubCat'])->name('product-sub-cat');
 Route::get('/product-brand/{slug}', [FrontendController::class, 'productBrand'])->name('product-brand');
 Route::post('/shop/filter', [FrontendController::class, 'filter'])->name('shop.filter');
-// Route::get('/user/{id}', [FrontendController::class, 'showProfile'])->name('user-profile');
-
-// Route::get('/shop/filter', [ProductController::class, 'filterProducts'])->name('shop.filter');
+Route::get('/user/{id}', [FrontendController::class, 'showProfile'])->name('user-profile');
 
 // Cart section
 Route::get('/add-to-cart/{slug}', [CartController::class, 'addToCart'])->name('add-to-cart')->middleware('user');
 Route::post('/add-to-cart', [CartController::class, 'singleAddToCart'])->name('single-add-to-cart')->middleware('user');
 Route::get('cart-delete/{id}', [CartController::class, 'cartDelete'])->name('cart-delete');
 Route::post('cart-update', [CartController::class, 'cartUpdate'])->name('cart.update');
-
 Route::get('/cart', function () {
-    return view('frontend.pages.cart');
-})->name('cart');
+    return view('frontend.pages.cart'); })->name('cart');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout')->middleware('user');
 // Wishlist
 Route::get('/wishlist', function () {
-    return view('frontend.pages.wishlist');
-})->name('wishlist');
+    return view('frontend.pages.wishlist'); })->name('wishlist');
 Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist')->middleware('user');
 Route::get('wishlist-delete/{id}', [WishlistController::class, 'wishlistDelete'])->name('wishlist-delete');
 Route::post('cart/order', [OrderController::class, 'store'])->name('cart.order');
@@ -100,7 +93,7 @@ Route::get('order/pdf/{id}', [OrderController::class, 'pdf'])->name('order.pdf')
 Route::get('/income', [OrderController::class, 'incomeChart'])->name('product.order.income');
 // Route::get('/user/chart',[AdminController::class, 'userPieChart'])->name('user.piechart');
 Route::get('/product-grids', [FrontendController::class, 'productGrids'])->name('product-grids');
-Route::get('/product-lists', [FrontendController::class, 'productLists'])->name('product-lists');
+// Route::get('/product-lists', [FrontendController::class, 'productLists'])->name('product-lists');
 Route::match(['get', 'post'], '/filter', [FrontendController::class, 'productFilter'])->name('shop.filter');
 // Order Track
 Route::get('/product/track', [OrderController::class, 'orderTrack'])->name('order.track');
@@ -115,11 +108,9 @@ Route::get('blog-tag/{slug}', [FrontendController::class, 'blogByTag'])->name('b
 
 // NewsLetter
 Route::post('/subscribe', [FrontendController::class, 'subscribe'])->name('subscribe');
-
 // Product Review
 Route::resource('/review', 'ProductReviewController');
 Route::post('product/{slug}/review', [ProductReviewController::class, 'store'])->name('review.store');
-
 // Post Comment
 Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');
 Route::resource('/comment', 'PostCommentController');
@@ -146,21 +137,17 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::resource('brand', 'BrandController');
     // Ajax for brand dataTable view
     Route::get('/brands', [BrandController::class, 'getBrandsData'])->name('admin.brands.data');
-
     // Profile
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin-profile');
     Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('profile-update');
     // Category
     Route::resource('/category', 'CategoryController');
     Route::get('/categories', [CategoryController::class, 'getCategoriesData'])->name('admin.categories.data');
-
     // Product
     Route::resource('product', ProductController::class);
     // Ajax for Product dataTable view
     Route::get('/products', [ProductController::class, 'getProductsData'])->name('admin.product.data');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
-
-
     // Ajax for sub category
     Route::post('/category/{id}/child', 'CategoryController@getChildByParent');
     // POST category
@@ -172,9 +159,9 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     // Message
     Route::resource('/message', 'MessageController');
     Route::get('/message/five', [MessageController::class, 'messageFive'])->name('messages.five');
-
     // Order
     Route::resource('/order', 'OrderController');
+    Route::get('order/getData', [OrderController::class, 'getData'])->name('order.getData');
     // Shipping
     Route::resource('/shipping', 'ShippingController');
     // Coupon
@@ -182,7 +169,6 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     // Settings
     Route::get('settings', [AdminController::class, 'settings'])->name('settings');
     Route::post('setting/update', [AdminController::class, 'settingsUpdate'])->name('settings.update');
-
     // Notification
     Route::get('/notification/{id}', [NotificationController::class, 'show'])->name('admin.notification');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('all.notification');
@@ -192,56 +178,54 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::post('change-password', [AdminController::class, 'changPasswordStore'])->name('change.password');
 });
 
-
 // User section start
 Route::group(['prefix' => 'user', 'middleware' => ['user']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('user');
     // Profile
     Route::get('/profile', [HomeController::class, 'profile'])->name('user-profile');
     Route::post('/profile/{id}', [HomeController::class, 'profileUpdate'])->name('user-profile-update');
-    //  Order
-    Route::get('/order', "HomeController@orderIndex")->name('user.order.index');
-    Route::get('/order/show/{id}', "HomeController@orderShow")->name('user.order.show');
-    Route::delete('/order/delete/{id}', [HomeController::class, 'userOrderDelete'])->name('user.order.delete');
+    // Order
+
     // Product Review
     Route::get('/user-review', [HomeController::class, 'productReviewIndex'])->name('user.productreview.index');
     Route::delete('/user-review/delete/{id}', [HomeController::class, 'productReviewDelete'])->name('user.productreview.delete');
     Route::get('/user-review/edit/{id}', [HomeController::class, 'productReviewEdit'])->name('user.productreview.edit');
     Route::patch('/user-review/update/{id}', [HomeController::class, 'productReviewUpdate'])->name('user.productreview.update');
-
     // Post comment
     Route::get('user-post/comment', [HomeController::class, 'userComment'])->name('user.post-comment.index');
     Route::delete('user-post/comment/delete/{id}', [HomeController::class, 'userCommentDelete'])->name('user.post-comment.delete');
     Route::get('user-post/comment/edit/{id}', [HomeController::class, 'userCommentEdit'])->name('user.post-comment.edit');
     Route::patch('user-post/comment/udpate/{id}', [HomeController::class, 'userCommentUpdate'])->name('user.post-comment.update');
-
     // Password Change
     Route::get('change-password', [HomeController::class, 'changePassword'])->name('user.change.password.form');
     Route::post('change-password', [HomeController::class, 'changPasswordStore'])->name('change.password');
-    Route::resource('product', UserProductController::class)->names('user.product');
-    Route::get('/products', [UserProductController::class, 'getProductsData'])->name('user.product.data');
-
+    // Product
+    Route::get('/user-profile/{id}', [FrontendController::class, 'showProfile'])->name('seller-profile');
+    Route::get('order/getData', [OrderController::class, 'sellerIndex'])->name('user.order.getData');
+    Route::resource('/order', 'OrderController');
+    // Route::patch('/order/{order}', [OrderController::class, 'sellerUpdate'])->name('seller.update');
 });
+
+
+
+Route::get('products', [UserProductController::class, 'index'])->name('user.product.index');
+Route::get('product/create', [UserProductController::class, 'create'])->name('user.product.create');
+Route::post('product', [UserProductController::class, 'store'])->name('user.product.store');
+Route::get('product/{id}', [UserProductController::class, 'show'])->name('user.product.show');
+Route::get('product/{id}/edit', [UserProductController::class, 'edit'])->name('user.product.edit');
+Route::patch('product/{id}', [UserProductController::class, 'update'])->name('user.product.update');
+Route::delete('product/{id}', [UserProductController::class, 'destroy'])->name('user.product.destroy');
+Route::get('products/data', [UserProductController::class, 'getProductsData'])->name('user.product.data');
+
+Route::get('/order', [HomeController::class, 'orderIndex'])->name('user.order.index');
+Route::get('/order/show/{id}', [HomeController::class, 'orderShow'])->name('user.order.show');
+Route::delete('/order/delete/{id}', [HomeController::class, 'userOrderDelete'])->name('user.order.delete');
+// Route::get('/product', UserProductController::class)->names('user.product');
+// Route::get('/products', [UserProductController::class, 'getProductsData'])->name('user.product.data');
+
 
 
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     Lfm::routes();
 });
-
-Route::get('/user/{id}', [FrontendController::class, 'showProfile'])->name('user-profile');
-Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-Route::get('/chat/{product}', [ChatController::class, 'show'])->name('chat.show');
-Route::post('/chat/{product}/start', [ChatController::class, 'startChat'])->name('chat.start');
-Route::post('/chat-messages', [ChatMessageController::class, 'store'])->name('chat-messages.store');
-Route::get('/chat-messages', [ChatMessageController::class, 'fetch'])->name('chat-messages.fetch');
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/chats', [ChatController::class, 'index']); // Fetch all chats
-    Route::get('/chats/{id}', [ChatController::class, 'show']); // Fetch a specific chat
-    Route::post('/chats/{id}/messages', [ChatController::class, 'storeMessage']); // Send a message
-});
-
-
-

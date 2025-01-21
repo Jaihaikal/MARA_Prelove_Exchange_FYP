@@ -51,7 +51,7 @@
                         @php
                             $settings=DB::table('settings')->get();
                         @endphp                    
-                        <a href="{{route('home')}}"><img src="@foreach($settings as $data) {{$data->logo}} @endforeach" alt="logo"></a>
+                        <a href="{{route('home')}}"><img src="@foreach($settings as $data) {{$data->logo}} @endforeach" alt="logo" style="width: auto; height: 69px;"></a>
                     </div>
                     <!--/ End Logo -->
                     <!-- Search Form -->
@@ -173,9 +173,7 @@
                             @endauth
                             <!--/ End Shopping Item -->
                         </div>
-                        <div class="sinlge-bar shopping">
-                            <a href="{{route('chat.index')}}" class="single-icon"><i class="fas fa-comment"></i> <span class="total-count">{{Helper::cartCount()}}</span></a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

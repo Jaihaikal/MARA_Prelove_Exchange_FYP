@@ -9,7 +9,11 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    @include('backend.layouts.sidebar')
+    @if(auth()->user()->role == 'admin')
+        @include('backend.layouts.sidebar')
+    @else
+        @include('user.layouts.sidebar')
+    @endif
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
