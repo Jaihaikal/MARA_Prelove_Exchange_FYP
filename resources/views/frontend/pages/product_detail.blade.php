@@ -117,7 +117,7 @@
 													</div>
 													<div class="add-to-cart mt-4">
 														<button type="submit" class="btn">Add to cart</button>
-														<a href="{{route('add-to-wishlist',$product_detail->slug)}}" class="btn min"><i class="ti-heart"></i></a>
+														<a href="{{route('add-to-cart',$product_detail->slug)}}" class="btn min"><i class="ti-heart"></i></a>
 													</div>
 												</form>
 
@@ -282,29 +282,32 @@
 													<div class="short">
 														<div class="seller-details">
 															<h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #F7941D; padding-bottom: 5px; margin-top: 40px;">Seller Details</h4>
-															<p style="margin: 8px 0;">
-																<strong>Name:</strong> 
-																<a href="{{ route('seller-profile', $product_detail->user->id) }}" style="color: #F7941D; text-decoration: none;">
-																	{{ $product_detail->user->name }}
-																</a>
-																
-															</p>
-															<p style="margin: 8px 0;"><strong>Email:</strong> {{ $product_detail->user->email }}</p>
-															<p style="margin: 8px 0;"><strong>Phone:</strong> {{ $product_detail->user->phone ?? 'Not Provided' }}</p>
-															<p style="margin: 8px 0;"><strong>Student ID:</strong> {{ $product_detail->user->student_id ?? 'Not Provided' }}</p>
-															<p style="margin: 8px 0;"><strong>Faculty:</strong> {{ $product_detail->user->faculty_id ?? 'Not Provided' }}</p>
-															{{-- <form action="{{ route('chat.start', $product_detail->id) }}" method="POST" style="display: inline;">
-																@csrf
-																<button type="submit" class="btn btn-success">Chat with Seller</button>
-															</form> --}}
-
-															{{-- <form method="POST" action="{{ route('chat.create') }}">
-																@csrf
-																<input type="hidden" name="product_id" value="{{ $product_detail->id }}">
-																<input type="hidden" name="receiver_id" value="{{ $product_detail->user->id }}">  <!-- Assuming the seller is the product's user -->
-																<button type="submit">Chat with Seller</button>
-															</form>
-															 --}}
+															<table style="width: 100%; border-collapse: collapse;">
+																<tr>
+																	<td style="padding: 8px 0;"><strong>Name:</strong></td>
+																	<td style="padding: 8px 0;">
+																		<a href="{{ route('seller-profile', $product_detail->user->id) }}" style="color: #F7941D; text-decoration: none;">
+																			{{ $product_detail->user->name }}
+																		</a>
+																	</td>
+																</tr>
+																<tr>
+																	<td style="padding: 8px 0;"><strong>Email:</strong></td>
+																	<td style="padding: 8px 0;">{{ $product_detail->user->email }}</td>
+																</tr>
+																<tr>
+																	<td style="padding: 8px 0;"><strong>Phone:</strong></td>
+																	<td style="padding: 8px 0;">{{ $product_detail->user->phone ?? 'Not Provided' }}</td>
+																</tr>
+																<tr>
+																	<td style="padding: 8px 0;"><strong>Student ID:</strong></td>
+																	<td style="padding: 8px 0;">{{ $product_detail->user->student_id ?? 'Not Provided' }}</td>
+																</tr>
+																<tr>
+																	<td style="padding: 8px 0;"><strong>Faculty:</strong></td>
+																	<td style="padding: 8px 0;">{{ $product_detail->user->faculty->name ?? 'Not Provided' }}</td>
+																</tr>
+															</table>
 														</div>
 													</div>
 												</div>
@@ -352,12 +355,10 @@
 										
                                         <div class="button-head">
                                             <div class="product-action">
-                                                <a data-toggle="modal" data-target="#modelExample" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
-                                                <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
+                                                <a title="Wishlist" href=""><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
                                             </div>
                                             <div class="product-action-2">
-                                                <a title="Add to cart" href="#">Add to cart</a>
+                                                <a title="Add to cart" href="{{route('add-to-cart',$product_detail->slug)}}">Add to cart</a>
                                             </div>
                                         </div>
                                     </div>
@@ -479,19 +480,7 @@
                                 <a href="#" class="btn">Add to cart</a>
                                 <a href="#" class="btn min"><i class="ti-heart"></i></a>
                                 <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
-								
                             </div>
-							
-							
-                            {{-- <div class="default-social">
-                                <h4 class="share-now">Share:</h4>
-                                <ul>
-                                    <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                                    <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                            </div> --}}
                         </div>
                     </div>
                 </div>

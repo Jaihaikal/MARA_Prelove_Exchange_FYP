@@ -66,10 +66,10 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item"
-                                                    href="{{ route('order.show', $order->id) }}">View</a>
+                                                    href="{{ route('seller.order.show', $order->id) }}">View</a>
                                                 <a class="dropdown-item"
-                                                    href="{{ route('order.edit', $order->id) }}">Edit</a>
-                                                <form method="POST" action="{{ route('order.destroy', [$order->id]) }}"
+                                                    href="{{ route('seller.order.edit', $order->id) }}">Edit</a>
+                                                <form method="POST" action="{{ route('seller.order.destroy', [$order->id]) }}"
                                                     style="display:inline;">
                                                     @csrf
                                                     @method('delete')

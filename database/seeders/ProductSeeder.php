@@ -13,6 +13,16 @@ class ProductSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
+        $productsData = [
+            'Phone' => ['Iphone XS', 'Samsung S9'],
+            'Computer' => ['MSI GF63', 'Asus ROG TUF'],
+            'Gadget' => ['Earbud Samsung', 'Headphone Redmi'],
+            'Men' => ['Denim Jacket', 'North Face Hoodie'],
+            'Women' => ['ZARA Blouser', 'Oversize Jeans'],
+            'Book' => ['Basic Accounting', 'C++ for Beginner'],
+            'Stationary' => ['Architecture Drawing Tools', 'Calculator']
+        ];
+
         // Fetch all parent categories
         $parentCategories = Category::where('is_parent', true)->get();
 
@@ -21,17 +31,16 @@ class ProductSeeder extends Seeder
             $subCategories = Category::where('parent_id', $parent->id)->get();
 
             foreach ($subCategories as $subCategory) {
-                // Create 20 products for each subcategory
-                for ($i = 1; $i <= 20; $i++) {
-
+                // Create specific products for each subcategory
+                foreach ($productsData[$subCategory->title] as $productTitle) {
                     $photos = [];
                     for ($j = 1; $j <= 3; $j++) {
                         // Using Lorem Picsum or Placeholder Images
                         $photos[] = $faker->imageUrl(300, 300, 'product', true, 'Product-' . $j);
                     }
                     Product::create([
-                        'title' => 'Product - ' . $subCategory->title . ' ' . $i,
-                        'slug' => Str::slug('Product - ' . $subCategory->title . ' ' . $i),
+                        'title' => $productTitle,
+                        'slug' => Str::slug($productTitle),
                         'summary' => $faker->sentence(),
                         'description' => $faker->paragraph(),
                         'cat_id' => $parent->id, // Parent category ID
@@ -40,7 +49,7 @@ class ProductSeeder extends Seeder
                         'brand_id' => $faker->numberBetween(1, 10), // Assuming you have 10 brands
                         'discount' => $faker->numberBetween(0, 50), // Random discount between 0 and 50
                         'status' => 'active',
-                        'photo' => '/storage/photos/1/Products/ProductDummy.jpg', // Store as comma-separated string
+                        'photo' => '/storage/photos/1/Clothing.png', // Store as comma-separated string
                         'stock' => $faker->numberBetween(1, 5), // Random stock between 1 and 5
                         'is_featured' => true, // Always featured
                         'condition' => $faker->randomElement(['new', 'used']), // Random condition
@@ -50,5 +59,4 @@ class ProductSeeder extends Seeder
             }
         }
     }
-
 }

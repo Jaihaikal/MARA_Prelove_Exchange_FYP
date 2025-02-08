@@ -52,7 +52,7 @@ class Category extends Model
 
     public function brands()
     {
-        return $this->hasMany(Brand::class);
+        return $this->hasManyThrough(Brand::class, Product::class, 'cat_id', 'id', 'id', 'brand_id');
     }
 
 }

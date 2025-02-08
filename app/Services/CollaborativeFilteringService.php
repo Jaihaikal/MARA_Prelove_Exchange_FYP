@@ -80,38 +80,38 @@ class CollaborativeFilteringService
 
     // Step 3: Generate recommendations
     public function getRecommendations($userId, $matrix)
-{
-    $recommendations = [];
+    {
+        $recommendations = [];
 
-    // Get the target user's existing products
-    $userProducts = $matrix[$userId] ?? [];
+        // Get the target user's existing products
+        $userProducts = $matrix[$userId] ?? [];
 
-    // Fetch details of products the user has interacted with
-    $userProductIds = array_keys($userProducts);
-    $userProductDetails = Product::whereIn('id', $userProductIds)->get();
+        // Fetch details of products the user has interacted with
+        $userProductIds = array_keys($userProducts);
+        $userProductDetails = Product::whereIn('id', $userProductIds)->get();
 
-    // Fetch all products
-    $allProducts = Product::all();
+        // Fetch all products
+        $allProducts = Product::all();
 
-    // Calculate similarity and generate recommendations
-    foreach ($allProducts as $product) {
-        if (!isset($userProducts[$product->id])) {
-            $similarityScore = 0;
-            foreach ($userProductDetails as $userProduct) {
-                $similarityScore += $this->calculateProductSimilarity($userProduct, $product);
-            }
-            if (count($userProductDetails) > 0) {
-                $recommendations[$product->id] = $similarityScore / count($userProductDetails);
+        // Calculate similarity and generate recommendations
+        foreach ($allProducts as $product) {
+            if (!isset($userProducts[$product->id])) {
+                $similarityScore = 0;
+                foreach ($userProductDetails as $userProduct) {
+                    $similarityScore += $this->calculateProductSimilarity($userProduct, $product);
+                }
+                if (count($userProductDetails) > 0) {
+                    $recommendations[$product->id] = $similarityScore / count($userProductDetails);
+                }
             }
         }
+
+        // Sort recommendations by score (descending)
+        arsort($recommendations);
+
+        // Limit the number of recommendations to 8
+        return array_slice(array_keys($recommendations), 0, 8);
     }
-
-    // Sort recommendations by score (descending)
-    arsort($recommendations);
-
-    // Limit the number of recommendations to 8
-    return array_slice(array_keys($recommendations), 0, 8);
-}
 }
 
 

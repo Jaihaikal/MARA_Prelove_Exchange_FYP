@@ -20,7 +20,7 @@
               <th>ID</th>
               <th>Order No.</th>
               <th>Product Name</th>
-              <th>Seller Name</th>
+              <th>Buyer Name</th>
               <th>Seller Phone Number</th>
               <th>Seller Email</th>
               <th>Quantity</th>
@@ -35,7 +35,7 @@
                     <td>{{$order->id}}</td>
                     <td>{{$order->order_number}}</td>
                     <td>{{$order->product->title}}</td>
-                    <td>{{$order->product->user->name}}</td>
+                    <td>{{$order->user->name}}</td>
                     <td>{{$order->product->user->phone}}</td>
                     <td>{{$order->product->user->email}}</td>
                     <td>{{$order->quantity}}</td>

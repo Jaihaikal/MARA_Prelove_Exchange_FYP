@@ -9,13 +9,14 @@ class Brand extends Model
     protected $fillable = [
         'title',
         'slug',
-        'status'
+        'status',
+        'category_id' // Add category_id to fillable
     ];
 
     // public static function getProductByBrand($id){
     //     return Product::where('brand_id',$id)->paginate(10);
     // }
-    public function products(){
+public function products(){
         return $this->hasMany('App\Models\Product','brand_id','id')->where('status','active');
     }
     public static function getProductByBrand($slug){
@@ -28,7 +29,7 @@ class Brand extends Model
         return null;
     }
     public function category()
-{
-    return $this->belongsTo(Category::class);
-}
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

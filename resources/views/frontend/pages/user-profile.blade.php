@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="online shop, purchase, cart, ecommerce site, best online shopping">
-	<meta property="og:type" content="article">
+    <meta property="og:type" content="article">
 @endsection
 @section('title', 'E-SHOP || PRODUCT DETAIL')
 @section('main-content')
@@ -18,7 +18,7 @@
                 <div class="col-12">
                     <div class="bread-inner">
                         <ul class="bread-list">
-                            <li><a href="{{route('home')}}">Home<i class="ti-arrow-right"></i></a></li>
+                            <li><a href="{{ route('home') }}">Home<i class="ti-arrow-right"></i></a></li>
                             <li class="active"><a href="">User Profile</a></li>
                         </ul>
                     </div>
@@ -30,20 +30,23 @@
         <div class="container">
             <div class="row align-items-start">
                 <!-- User Details Section -->
-                <div class="col-md-4">
+            <div class="col-md-4">
                     <div class="card">
                         <div class="card-body text-center">
-                            <img src="{{ $user->photo ?? 'https://via.placeholder.com/150' }}" alt="Profile Picture"
-                                class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                            <h4 class="mt-3">{{ $user->name }}</h4>
-                            <p><strong>Email:</strong> {{ $user->email }}</p>
-                            <p><strong>Phone:</strong> {{ $user->phone ?? 'Not Provided' }}</p>
-                            <p><strong>Student ID:</strong> {{ $user->student_id ?? 'Not Provided' }}</p>
-                            <p><strong>Faculty:</strong> {{ $user->faculty_id ?? 'Not Provided' }}</p>
+                                @if ($user->photo)
+                                <img src="{{ $user->photo }}" class="img-fluid rounded-circle" style="width:150px; height:150px;" alt="{{ $user->photo }}">
+                                @else
+                                    <img src="{{ asset('backend/img/avatar.png') }}" class="img-fluid rounded-circle" style="width:150px; height:150px;" alt="avatar.png">
+                                @endif
+                                <h4 class="mt-3">{{ $user->name }}</h4>
+                                <p><strong>Email:</strong> {{ $user->email }}</p>
+                                <p><strong>Phone:</strong> {{ $user->phone ?? 'Not Provided' }}</p>
+                                <p><strong>Student ID:</strong> {{ $user->student_id ?? 'Not Provided' }}</p>
+                                <p><strong>Faculty:</strong> {{ $user->faculty_id ?? 'Not Provided' }}</p>
                         </div>
                     </div>
                 </div>
-        
+
                 <!-- Products Section -->
                 <div class="col-md-8">
                     <div class="row">
@@ -71,7 +74,8 @@
                                             <div class="button-head">
                                                 <div class="product-action mr-4">
                                                     <a data-toggle="modal" data-target="#{{ $product->id }}"
-                                                        title="Quick View" href="#"><i class="ti-eye"></i><span>Quick Shop</span></a>
+                                                        title="Quick View" href="#"><i class="ti-eye"></i><span>Quick
+                                                            Shop</span></a>
                                                     <a title="Wishlist"
                                                         href="{{ route('add-to-wishlist', $product->slug) }}"
                                                         class="wishlist" data-id="{{ $product->id }}"><i
@@ -89,12 +93,14 @@
                                                     href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
                                             </h3>
                                             @php
-                                                $after_discount = $product->price - ($product->price * $product->discount) / 100;
+                                                $after_discount =
+                                                    $product->price - ($product->price * $product->discount) / 100;
                                             @endphp
                                             <span>${{ number_format($after_discount, 2) }}</span>
-        
+
                                             @if ($product->discount && $product->discount > 0)
-                                                <del style="padding-left:4%;">${{ number_format($product->price, 2) }}</del>
+                                                <del
+                                                    style="padding-left:4%;">${{ number_format($product->price, 2) }}</del>
                                             @endif
                                         </div>
                                     </div>
@@ -116,8 +122,8 @@
                 </div>
             </div>
         </div>
-        
+
     </section>
-   
+
 
 @endsection
