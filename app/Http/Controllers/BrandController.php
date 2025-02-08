@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
+
 class BrandController extends Controller
 {
     /**
@@ -16,6 +18,20 @@ class BrandController extends Controller
     {
         $brand=Brand::orderBy('id','DESC')->paginate();
         return view('backend.brand.index')->with('brands',$brand);
+    }
+
+    public function getBrandsData(Request $request)
+    {
+        $query = Brand::query(); // Assuming you have a Brand model
+
+        return DataTables::of($query)
+            ->addColumn('status', function ($brand) {
+                return $brand->status === 'active'
+                    ? '<span class="badge badge-success">Active</span>'
+                    : '<span class="badge badge-warning">Inactive</span>';
+            })
+            ->rawColumns(['status']) // Allow HTML in the 'status' column
+            ->make(true);
     }
 
     /**

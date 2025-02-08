@@ -16,7 +16,6 @@
 @endsection
 @section('title','E-SHOP || PRODUCT DETAIL')
 @section('main-content')
-
 		<!-- Breadcrumbs -->
 		<div class="breadcrumbs">
 			<div class="container">
@@ -38,7 +37,7 @@
 		<section class="shop single section">
 					<div class="container">
 						<div class="row"> 
-							<div class="col-12">
+							<div class="col-12" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); padding: 50px; background-color: #fff; ">
 								<div class="row">
 									<div class="col-lg-6 col-12">
 										<!-- Product Slider -->
@@ -47,12 +46,13 @@
 											<div class="flexslider-thumbnails">
 												<ul class="slides">
 													@php 
-														$photo=explode(',',$product_detail->photo);
-													// dd($photo);
+														$photo = explode(',', $product_detail->photo);
 													@endphp
 													@foreach($photo as $data)
-														<li data-thumb="{{$data}}" rel="adjustX:10, adjustY:">
-															<img src="{{$data}}" alt="{{$data}}">
+														<li data-thumb="{{ $data }}" rel="adjustX:10, adjustY:">
+															<div style="width: 100%; padding-top: 100%; position: relative; overflow: hidden; background-color: #f4f4f4;">
+																<img src="{{ $data }}" alt="Product Image" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
+															</div>
 														</li>
 													@endforeach
 												</ul>
@@ -65,8 +65,7 @@
 										<div class="product-des">
 											<!-- Description -->
 											<div class="short">
-												<h4>{{$product_detail->title}}</h4>
-
+												<h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #F7941D; padding-bottom: 5px; margin-top: 40px;">{{$product_detail->title}}</h4>
 												<div class="rating-main">
 													<ul class="rating">
 														@php
@@ -87,41 +86,11 @@
                                                 @endphp
 												<p class="price"><span class="discount">RM {{number_format($after_discount,2)}}</span><s>RM {{number_format($product_detail->price,2)}}</s> </p>
 												<div>
-													<p class="description">{!!($product_detail->summary)!!}</p>
-													{{-- <p class="description">Product Summary <br>{!!($product_detail->summary)!!}</p> --}}
-													<p class="description">
-														{!!($product_detail->user->name)!!}
-													</p>
+													{{-- <p class="description">{!!($product_detail->summary)!!}</p> --}}
+													<p class="description">Summary <br>{!!($product_detail->summary)!!}</p>
 												</div>
-												
 											</div>
-											<!--/ End Description -->
-											<!-- Color -->
-											{{-- <div class="color">
-												<h4>Available Options <span>Color</span></h4>
-												<ul>
-													<li><a href="#" class="one"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="two"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="three"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="four"><i class="ti-check"></i></a></li>
-												</ul>
-											</div> --}}
-											<!--/ End Color -->
-											<!-- Size -->
-											@if($product_detail->size)
-												<div class="size mt-4">
-													<h4>Size</h4>
-													<ul>
-														@php 
-															$sizes=explode(',',$product_detail->size);
-															// dd($sizes);
-														@endphp
-														@foreach($sizes as $size)
-														<li><a href="#" class="one">{{$size}}</a></li>
-														@endforeach
-													</ul>
-												</div>
-											@endif
+											
 											<!--/ End Size -->
 											<!-- Product Buy -->
 											<div class="product-buy">
@@ -156,7 +125,15 @@
 												@if($product_detail->sub_cat_info)
 												<p class="cat mt-1">Sub Category :<a href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}</a></p>
 												@endif
-												<p class="availability">Stock : @if($product_detail->stock>0)<span class="badge badge-success">{{$product_detail->stock}}</span>@else <span class="badge badge-danger">{{$product_detail->stock}}</span>  @endif</p>
+												<p class="availability" style="font-size: 14px; color: #333; margin: 5px 0;">
+													Stock: 
+													@if($product_detail->stock > 0)
+														<span style="color: #28a745; font-weight: bold;">{{$product_detail->stock}}</span>
+													@else
+														<span style="color: #dc3545; font-weight: bold;">Out of Stock</span>
+													@endif
+												</p>
+												
 											</div>
 											<!--/ End Product Buy -->
 										</div>
@@ -186,6 +163,7 @@
 														</div>
 													</div>
 												</div>
+												
 												<!--/ End Description Tab -->
 												<!-- Reviews Tab -->
 												<div class="tab-pane fade" id="reviews" role="tabpanel">
@@ -230,7 +208,7 @@
 																		<div class="col-lg-12 col-12">
 																			<div class="form-group">
 																				<label>Write a review</label>
-																				<textarea name="review" rows="6" placeholder="" ></textarea>
+																				<textarea style="border-radius: 8px; border: 1px solid #ddd; padding: 10px; font-size: 14px; width: 100%; box-sizing: border-box;" name="review" rows="6" placeholder="Enter your review..."></textarea>
 																			</div>
 																		</div>
 																		<div class="col-lg-12 col-12">
@@ -300,6 +278,37 @@
 													</div>
 												</div>
 												<!--/ End Reviews Tab -->
+												<div class="product-des">
+													<div class="short">
+														<div class="seller-details">
+															<h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #F7941D; padding-bottom: 5px; margin-top: 40px;">Seller Details</h4>
+															<p style="margin: 8px 0;">
+																<strong>Name:</strong> 
+																<a href="{{ route('seller-profile', $product_detail->user->id) }}" style="color: #F7941D; text-decoration: none;">
+																	{{ $product_detail->user->name }}
+																</a>
+																
+															</p>
+															<p style="margin: 8px 0;"><strong>Email:</strong> {{ $product_detail->user->email }}</p>
+															<p style="margin: 8px 0;"><strong>Phone:</strong> {{ $product_detail->user->phone ?? 'Not Provided' }}</p>
+															<p style="margin: 8px 0;"><strong>Student ID:</strong> {{ $product_detail->user->student_id ?? 'Not Provided' }}</p>
+															<p style="margin: 8px 0;"><strong>Faculty:</strong> {{ $product_detail->user->faculty_id ?? 'Not Provided' }}</p>
+															{{-- <form action="{{ route('chat.start', $product_detail->id) }}" method="POST" style="display: inline;">
+																@csrf
+																<button type="submit" class="btn btn-success">Chat with Seller</button>
+															</form> --}}
+
+															{{-- <form method="POST" action="{{ route('chat.create') }}">
+																@csrf
+																<input type="hidden" name="product_id" value="{{ $product_detail->id }}">
+																<input type="hidden" name="receiver_id" value="{{ $product_detail->user->id }}">  <!-- Assuming the seller is the product's user -->
+																<button type="submit">Chat with Seller</button>
+															</form>
+															 --}}
+														</div>
+													</div>
+												</div>
+												
 											</div>
 										</div>
 									</div>
@@ -309,6 +318,8 @@
 					</div>
 		</section>
 		<!--/ End Shop Single -->
+		
+		
 		
 		<!-- Start Most Popular -->
 	<div class="product-area most-popular related-product section">
@@ -329,15 +340,16 @@
                                 <!-- Start Single Product -->
                                 <div class="single-product">
                                     <div class="product-img">
-										<a href="{{route('product-detail',$data->slug)}}">
+										<a href="{{ route('product-detail', $data->slug) }}">
 											@php 
-												$photo=explode(',',$data->photo);
+												$photo = explode(',', $data->photo);
 											@endphp
-                                            <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                            <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                            <span class="price-dec">{{$data->discount}} % Off</span>
-                                                                    {{-- <span class="out-of-stock">Hot</span> --}}
-                                        </a>
+											<div style="width: 100%; padding-top: 100%; position: relative; overflow: hidden; background-color: #f4f4f4;">
+												<img class="default-img" src="{{ $photo[0] }}" alt="{{ $photo[0] }}" style="position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; object-fit: cover; transform: translate(-50%, -50%);">
+											</div>
+											<span class="price-dec">{{ $data->discount }} % Off</span>
+										</a>
+										
                                         <div class="button-head">
                                             <div class="product-action">
                                                 <a data-toggle="modal" data-target="#modelExample" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
@@ -448,7 +460,7 @@
                             </div>
                             <div class="quantity">
                                 <!-- Input Order -->
-                                <div class="input-group">
+                                <div class="input-group" style="border-padding">
                                     <div class="button minus">
                                         <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
                                             <i class="ti-minus"></i>
@@ -467,8 +479,11 @@
                                 <a href="#" class="btn">Add to cart</a>
                                 <a href="#" class="btn min"><i class="ti-heart"></i></a>
                                 <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
+								
                             </div>
-                            <div class="default-social">
+							
+							
+                            {{-- <div class="default-social">
                                 <h4 class="share-now">Share:</h4>
                                 <ul>
                                     <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
@@ -476,7 +491,7 @@
                                     <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
                                     <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -533,43 +548,12 @@
 		.star-rating__input:checked ~ .star-rating__ico:before {
 		content: "\F005";
 		}
+		
 
 	</style>
 @endpush
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=$('#quantity').val();
-            var pro_id=$(this).data('id');
-            // alert(quantity);
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-					else{
-                        swal('error',response.msg,'error').then(function(){
-							document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-    </script> --}}
 
 @endpush

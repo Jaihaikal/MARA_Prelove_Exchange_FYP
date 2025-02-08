@@ -1746,7 +1746,7 @@ Version:1.0
 }
 /* Sinlge Product */
 .single-product{
-	margin-top:50px;
+	margin-top:10px;
 }
 .single-product .product-img {
   position: relative;
@@ -1918,6 +1918,7 @@ Version:1.0
 }
 .single-product .product-img .product-action-2 {
 	position: absolute;
+
 	left: 0;
 	bottom: 0;
 	text-align: left;
@@ -1927,6 +1928,7 @@ Version:1.0
 	transition: all 250ms ease-out;
 }
 .single-product .product-img .product-action-2 a {
+	margin-left: 12px;
 	display: block;
 	background-color: transparent;
 	color: #333;
@@ -1992,7 +1994,7 @@ Version:1.0
   line-height: 50px;
 }
 .single-product .product-content{
-	margin-top:20px;
+	margin-top:5px;
 }
 .single-product .product-img:hover.default-overlay::before {
   background-color: rgba(38, 38, 38, 0.2);
@@ -2038,6 +2040,140 @@ Version:1.0
   opacity: .6;
   margin-right: 2px;
 }
+
+.single-product {
+    border: 1px solid #e0e0e0; /* Subtle border */
+    border-radius: 8px;       /* Rounded corners */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #fff;  /* White background */
+    overflow: hidden;        /* Clip overflowing content */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hover effects */
+    margin-bottom: 20px;     /* Spacing between products */
+}
+
+.single-product:hover {
+    transform: translateY(-5px); /* Lift on hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+}
+
+.product-img {
+    position: relative;
+    overflow: hidden; /* Ensure image doesn't overflow */
+    border-bottom: 1px solid #e0e0e0; /* Separator line */
+}
+
+.product-img a img {
+    width: 100%;          /* Make images responsive */
+    height: auto;         /* Maintain aspect ratio */
+    display: block;
+    transition: transform 0.3s ease; /* Smooth zoom effect */
+}
+
+.product-img a img.hover-img {
+    position: absolute;    /* Hover image overlay */
+    top: 0;
+    left: 0;
+    opacity: 0;            /* Hidden by default */
+    transition: opacity 0.3s ease; /* Smooth fade-in */
+}
+
+.product-img:hover a img.default-img {
+    transform: scale(1.1); /* Zoom effect on default image */
+}
+
+.product-img:hover a img.hover-img {
+    opacity: 1;            /* Reveal hover image */
+}
+
+.product-img .out-of-stock,
+.product-img .new,
+.product-img .hot,
+.product-img .price-dec {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff6f61; /* Highlight color */
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.product-img .new {
+    background-color: #28a745; /* Green for new products */
+}
+
+.product-img .hot {
+    background-color: #ff4500; /* Orange for hot products */
+}
+
+.button-head {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(100%); /* Hidden by default */
+    transition: transform 0.3s ease;
+}
+
+.product-img:hover .button-head {
+    transform: translateY(0); /* Reveal on hover */
+}
+
+.button-head .product-action a,
+.button-head .product-action-2 a {
+    color: #fff;       /* White text */
+    font-size: 14px;
+    margin-right: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.button-head .product-action a:hover,
+.button-head .product-action-2 a:hover {
+    color: #ff6f61;    /* Highlight on hover */
+}
+
+.product-content {
+    padding: 15px; /* Add padding */
+    text-align: center; /* Center-align content */
+}
+
+.product-content h3 a {
+    color: #333;           /* Dark text for titles */
+    text-decoration: none; /* Remove underline */
+    font-size: 16px;       /* Adjust font size */
+    font-weight: 600;      /* Make it bold */
+    transition: color 0.2s ease;
+}
+
+.product-content h3 a:hover {
+    color: #ff6f61;        /* Highlight on hover */
+}
+
+.product-content .product-price {
+    margin-top: 10px;      /* Add spacing */
+}
+
+.product-content .product-price span {
+    color: #28a745;        /* Highlighted price color */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.product-content .product-price del {
+    color: #999;           /* Muted original price */
+    font-size: 14px;
+}
+
 /*======================================
    End Single Product CSS
 ========================================*/
@@ -2045,23 +2181,213 @@ Version:1.0
 /*======================================
    Start Shop Sidebar CSS
 ========================================*/
-.shop-sidebar .single-widget {
-	margin-top: 30px;
-	background: #F6F7FB;
-	padding: 30px;
+/* Container Styles */
+
+/* Categories List */
+
+.single-widget.category {
+    background-color: #fff; /* Clean white background */
+    padding: 20px; /* Add internal spacing */
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
+    margin-bottom: 20px; /* Space below widget */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
 }
-.shop-sidebar .single-widget:first-child {
-	margin-top: 0;
+
+/* Title Styles */
+.single-widget.category .title {
+    font-size: 18px; /* Larger font for emphasis */
+    font-weight: 600; /* Bold text */
+    color: #333; /* Darker color for contrast */
+    margin-bottom: 15px; /* Space below the title */
+    border-bottom: 2px solid #f0f0f0; /* Underline for separation */
+    padding-bottom: 5px; /* Space below the title */
 }
-.shop-sidebar .single-widget .title {
-	position: relative;
-	font-size: 18px;
-	font-weight: 500;
-	text-transform: capitalize;
-	margin-bottom: 25px;
-	display: block;
-	border-bottom: 1px solid #ddd;
-	padding-bottom: 15px;
+
+/* List Styles */
+.single-widget.category .categor-list {
+    list-style: none; /* Remove bullet points */
+    margin: 0; /* Reset margin */
+    padding: 0; /* Reset padding */
+}
+
+.single-widget.category .categor-list li {
+    position: relative; /* For nested sub-lists */
+    padding: 8px 12px; /* Padding for clickable area */
+    background-color: #ffffff; /* Light gray background for items */
+    transition: all 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover Effect */
+.single-widget.category .categor-list li:hover {
+    background-color: #F7941D; /* Highlight background on hover */
+    border-color: #F7941D; /* Border matches background */
+	color: #fff; /* White text on hover */
+
+}
+
+/* Sub-Category Styles */
+
+/* dropdown */
+
+/* Style for the parent category */
+.categor-list .has-dropdown {
+    position: relative; /* Ensure the dropdown is positioned relative to the parent */
+}
+
+/* Hide subcategories by default */
+.categor-list .has-dropdown .sub-category {
+    display: none; /* Initially hidden */
+    position: absolute; /* Positioned relative to the parent */
+    top: 100%; /* Show below the parent */
+    left: 0;
+    background-color: #fff; /* White background for the dropdown */
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for a dropdown effect */
+    z-index: 1000;
+    border: 1px solid #ddd; /* Add a border to distinguish the dropdown */
+}
+
+/* Show subcategories on hover */
+.categor-list .has-dropdown:hover .sub-category {
+    display: block; /* Show the dropdown */
+}
+
+/* Style individual subcategory items */
+.categor-list .sub-category li {
+    margin: 5px 0; /* Add spacing between items */
+}
+
+/* Subcategory links */
+.categor-list .sub-category li a {
+    color: #333; /* Dark text color for visibility */
+    background-color: #fff; /* White background for each item */
+    padding: 5px 10px; /* Add padding for better spacing */
+    border-radius: 4px; /* Optional: Rounded corners for items */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Ensure full clickable area */
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
+}
+
+/* Subcategory hover effect */
+.categor-list .sub-category li a:hover {
+    color: #fff; /* White text color on hover */
+    background-color: #F7941D; /* Highlight background color */
+}
+
+
+
+/* General styling for single widgets */
+.single-widget {
+    margin-bottom: 30px; /* Space between widgets */
+    padding: 20px;       /* Padding inside widgets */
+    background-color: #fff; /* White background for contrast */
+    border-radius: 8px;  /* Rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Widget Title */
+.single-widget h3.title {
+    font-size: 18px;       /* Slightly larger font size */
+    font-weight: 600;      /* Bold text for emphasis */
+    color: #333;           /* Darker text color */
+    border-bottom: 2px solid #f0f0f0; /* Subtle underline */
+    padding-bottom: 10px;  /* Space below the title */
+    margin-bottom: 15px;   /* Space before the widget content */
+}
+
+/* Price Filter */
+.single-widget.range {
+    background-color: #fff; /* Clean white background */
+    padding: 20px; /* Add internal spacing */
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
+    margin-bottom: 20px; /* Space below widget */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
+	
+	
+}
+.single-widget.range .price-filter {
+    padding: 15px;         /* Add padding inside the price filter */
+    background-color: #ffffff; /* Light background */
+    border-radius: 6px;    /* Rounded corners */
+	
+}
+
+.single-widget.range .filter_button {
+    background-color: #ff6f61; /* Button color */
+    color: #ffffff;               /* White text */
+    border: none;              /* No border */
+    padding: 8px 15px;         /* Add padding */
+    border-radius: 4px;        /* Rounded button */
+    cursor: pointer;           /* Pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth hover */
+}
+
+.single-widget.range .filter_button:hover {
+    background-color: #e05a50; /* Darker hover color */
+}
+
+/* Recent Posts */
+.single-widget.recent-post {
+    background-color: #fff; /* Clean white background */
+    padding: 20px; /* Add internal spacing */
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
+    margin-bottom: 20px; /* Space below widget */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
+}
+
+.single-widget.recent-post .single-post {
+    display: flex;          /* Side-by-side layout */
+    align-items: center;    /* Center-align content */
+    margin-bottom: 15px;    /* Space between posts */
+    border-bottom: 1px solid #f0f0f0; /* Divider between posts */
+    padding-bottom: 10px;   /* Space below each post */
+}
+
+.single-widget.recent-post .single-post .image {
+    width: 70px;           /* Fixed size for the circular frame */
+    height: 70px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border-radius: 50%;    /* Make the frame circular */
+}
+
+.single-widget.recent-post .single-post .image img {
+    width: 100%;           /* Ensure the image covers the frame */
+    height: 100%;
+    object-fit: cover;     /* Ensure the image fits within the frame without distortion */
+    border-radius: 50%;    /* Make the image circular */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.single-widget.recent-post .single-post .content {
+    margin-left: 15px;     /* Space between image and text */
+}
+
+.single-widget.recent-post .single-post .content h5 a {
+    font-size: 14px;       /* Font size for post title */
+    color: #333;           /* Darker text color */
+    font-weight: 600;      /* Slightly bold */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease; /* Smooth hover */
+}
+
+.single-widget.recent-post .single-post .content h5 a:hover {
+    color: #ff6f61;        /* Highlight on hover */
+}
+
+.single-widget.recent-post .single-post .content .price {
+    font-size: 13px;       /* Smaller font for price */
+    color: #555;           /* Subtle text */
+    margin-top: 5px;       /* Space above price */
+}
+
+.single-widget.recent-post .single-post .content .price del {
+    color: #999;           /* Muted color for original price */
+    margin-right: 5px;     /* Space between original and discounted prices */
 }
 /* Shop Price */
 .shop .range .price-filter {
@@ -2138,12 +2464,14 @@ Version:1.0
 	color:#666;
 }
 /* Category List */
-.shop-sidebar .categor-list {
-	margin-top: 10px;
-}
-.shop-sidebar .categor-list li{
 	
+.shop-sidebar .categor-list li {
+	margin-bottom: 10px;
 }
+.shop-sidebar .categor-list li:last-child{
+	margin-bottom:0px;
+}
+
 .shop-sidebar .categor-list li {
 	margin-bottom: 10px;
 }
@@ -2158,68 +2486,18 @@ Version:1.0
 	text-transform: capitalize;
 }
 .shop-sidebar .categor-list li a:hover{
-	color:#F7941D;
+	color:#ffffff;
 }
 /* Recent Post */
-.shop-sidebar .single-post {
-	position: relative;
-	margin-top: 30px;
-    padding-bottom: 30px;
-	border-bottom: 1px solid #ddd;
-}
-.shop-sidebar .single-post.first{
-	padding-top:0px;
-}
-.shop-sidebar .single-post:last-child{
-	padding-bottom:0px;
-	border:none;
-}
-.shop-sidebar .single-post .image img{
-	height: 80px;
-	width: 80px;
-	position:absolute;
-	left:0;
-	top:0;
-	border-radius:100%;
-}
-.shop-sidebar .single-post .content{
-	padding-left:100px;
-}
-.shop-sidebar .single-post .content h5 {
-	line-height: 18px;
-}
-.shop-sidebar .single-post .content h5 a {
-	color: #222;
-	font-weight: 500;
-	font-size: 14px;
-	font-weight: 500;
-	display: block;
-}
-.shop-sidebar .single-post .content h5 a:hover{
-	color:#F7941D;
-}
-.shop-sidebar .single-post .content .price {
-	display: block;
-	color: #333;
-	font-weight: 500;
-	margin: 5px 0 0px 0;
-	text-transform: uppercase;
-	font-size: 14px;
-}
-.shop-sidebar .single-post .reviews li{
-	display:inline-block;
-}
-.shop-sidebar .single-post .reviews li i{
-	color:#999;
-}
-.shop-sidebar .single-post .reviews li.yellow i{
-	color:#F7941D;
-}
+
 /* Shop Topbar */
 .shop .shop-top {
 	clear: both;
-	background: #f6f7fb;
+	background: #ffffff;
 	padding: 18px 20px 50px 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
 }
 .shop .shop-shorter {
 	float: left;
@@ -2301,6 +2579,7 @@ Version:1.0
 ========================================*/
 .shop.single{
 	padding:70px 0 100px;
+	
 }
 .shop.single .product-gallery {
 	margin-top: 30px;
@@ -2350,7 +2629,6 @@ Version:1.0
 	padding-bottom: 20px;
 	border-bottom: 1px solid #eee;
 }
-.shop.single .product-des {}
 .shop.single .product-des .total-review{
 	font-size:14px;
 	font-weight:500;
@@ -2387,10 +2665,6 @@ Version:1.0
 	margin-right:15px;
 	color:#F7941D;
 }
-.shop.single .product-des .product-buy {
-	margin-top: 40px;
-}
-.shop.single .product-des .product-buy{}
 .shop.single .product-des .color {
 	display: inline-block;
 	margin-right: 50px;
@@ -2550,11 +2824,16 @@ Version:1.0
 	color: #fff;
 	display: inline-block;
 	font-weight: 500;
+    border-radius: 6px; /* Slightly rounded corners for a modern, subtle look */
+
 }
 .shop.single .add-to-cart .btn:hover{
 	color:#fff;
 	background:#F7941D;
 }
+
+
+
 .shop.single .add-to-cart .btn.min {
 	padding: 0 20px;
 	font-size: 17px;
@@ -2576,9 +2855,10 @@ Version:1.0
 	color:#F7941D;
 }
 .shop.single .availability{
+	font-size: 14px;
+	font-weight: 500;
 	color:#333;
-	font-size:14px;
-	margin-top:6px;
+	margin-top:30px;
 }
 /* Product Tab */
 .shop.single .product-info {
@@ -2602,6 +2882,8 @@ Version:1.0
 	font-weight: 500;
 	font-size: 14px;
 	border: 1px solid #eee;
+    border-radius: 6px; /* Slightly rounded corners for a modern, subtle look */
+
 }
 .shop.single .nav-tabs li a i{
 	margin-right:10px;
@@ -3406,11 +3688,12 @@ Version:1.0
 	height: 45px;
 	line-height: 50px;
 	padding: 0 20px;
-	border-radius: 3px;
 	border-radius: 0px;
 	color:#333 !important;
-	border: none;
-	background:#F6F7FB;
+	background-color: rgb(255, 255, 255);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
 }
 .shop.login .form .form-group label {
 	color: #333;
@@ -4907,6 +5190,101 @@ Version:1.0
 	color:#fff;
 	text-decoration:underline;
 }
+/* Ensures the image wrapper always has a 1:1 aspect ratio */
+.image-wrapper {
+    width: 100%;
+    padding-top: 100%; /* This creates a square aspect ratio */
+    position: relative;
+    overflow: hidden;
+    background-color: #f5f5f5; /* Light grey background for blank frame */
+    border: 1px solid #ddd; /* Optional: Add a border for blank frame */
+}
+
+/* Styles for the product image */
+.product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the entire square */
+    display: block;
+}
+
+/* Styles for the blank frame when there is no image */
+.blank-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5; /* Matches the wrapper background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #aaa; /* Light grey text */
+}
+
+/* Optional: Add placeholder text or icon */
+.blank-frame::after {
+    content: "No Image";
+    font-style: italic;
+}
+
+.pagination {
+	display: inline-flex;
+}
+
+ul.pagination {
+	display: flex;
+	gap: 8px;
+	/* Space between buttons */
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+/* Pagination Links */
+ul.pagination li a {
+	display: inline-block;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	/* Light border */
+	border-radius: 4px;
+	text-decoration: none;
+	color: #333;
+	/* Neutral text color */
+	font-size: 14px;
+	transition: all 0.2s ease;
+}
+
+/* Active Pagination Link */
+ul.pagination li.active span {
+	background-color: #F7941D;
+	/* Highlight color */
+	color: white;
+	border: 1px solid #F7941D;
+	border-radius: 4px;
+	padding: 8px 12px;
+}
+
+/* Hover State for Links */
+ul.pagination li a:hover {
+	background-color: #f0f0f0;
+	/* Subtle hover effect */
+	border-color: #F7941D;
+	color: #F7941D;
+}
+
+/* Disable Links */
+ul.pagination li.disabled span {
+	color: #999;
+	/* Light gray for disabled links */
+	cursor: not-allowed;
+}
+
+
 /*=============================
 	End Footer CSS
 ===============================*/

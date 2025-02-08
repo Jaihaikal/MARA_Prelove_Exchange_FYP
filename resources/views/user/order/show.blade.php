@@ -29,7 +29,6 @@
             <td>{{$order->first_name}} {{$order->last_name}}</td>
             <td>{{$order->email}}</td>
             <td>{{$order->quantity}}</td>
-            <td>${{$order->shipping->price}}</td>
             <td>${{number_format($order->total_amount,2)}}</td>
             <td>
                 @if($order->status=='new')
@@ -77,13 +76,7 @@
                         <td>Order Status</td>
                         <td> : {{$order->status}}</td>
                     </tr>
-                    <tr>
-                      @php
-                          $shipping_charge=DB::table('shippings')->where('id',$order->shipping_id)->pluck('price');
-                      @endphp
-                        <td>Shipping Charge</td>
-                        <td> :${{$order->shipping->price}}</td>
-                    </tr>
+                    
                     <tr>
                         <td>Total Amount</td>
                         <td> : $ {{number_format($order->total_amount,2)}}</td>

@@ -17,39 +17,28 @@
         <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>S.N.</th>
+              <th>ID</th>
               <th>Order No.</th>
-              <th>Name</th>
-              <th>Email</th>
+              <th>Product Name</th>
+              <th>Seller Name</th>
+              <th>Seller Phone Number</th>
+              <th>Seller Email</th>
               <th>Quantity</th>
-              {{-- <th>Charge</th> --}}
               <th>Total Amount</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th>S.N.</th>
-              <th>Order No.</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Quantity</th>
-              {{-- <th>Charge</th> --}}
-              <th>Total Amount</th>
-              <th>Status</th>
-              <th>Action</th>
-              </tr>
-          </tfoot>
           <tbody>
             @foreach($orders as $order)
                 <tr>
                     <td>{{$order->id}}</td>
                     <td>{{$order->order_number}}</td>
-                    <td>{{$order->first_name}} {{$order->last_name}}</td>
-                    <td>{{$order->email}}</td>
+                    <td>{{$order->product->title}}</td>
+                    <td>{{$order->product->user->name}}</td>
+                    <td>{{$order->product->user->phone}}</td>
+                    <td>{{$order->product->user->email}}</td>
                     <td>{{$order->quantity}}</td>
-                    {{-- <td>${{$order->shipping->price}}</td> --}}
                     <td>${{number_format($order->total_amount,2)}}</td>
                     <td>
                         @if($order->status=='new')

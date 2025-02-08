@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
 {
@@ -18,6 +19,41 @@ class CategoryController extends Controller
         $category=Category::getAllCategory();
         // return $category;
         return view('backend.category.index')->with('categories',$category);
+    }
+
+    public function getCategoriesData(Request $request)
+    {
+        $query = Category::query(); 
+
+            return DataTables::of($query)
+            ->addColumn('parent', function ($category) {
+                return $category->parent_info->title ?? 'N/A';
+            })
+            ->addColumn('photo', function ($category) {
+                return $category->photo
+                    ? '<img src="' . asset($category->photo) . '" class="img-fluid zoom" style="max-width:80px;" alt="' . $category->title . '">'
+                    : '<img src="' . asset('backend/img/thumbnail-default.jpg') . '" class="img-fluid" style="max-width:80px;" alt="Default Image">';
+            })
+            ->addColumn('status', function ($category) {
+                $badgeClass = $category->status == 'active' ? 'success' : 'warning';
+                return '<span class="badge badge-' . $badgeClass . '">' . ucfirst($category->status) . '</span>';
+            })
+            ->addColumn('action', function ($category) {
+                return '
+                    <a href="' . route('category.edit', $category->id) . '" class="btn btn-sm btn-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form method="POST" action="' . route('category.destroy', $category->id) . '" style="display: inline;">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button class="btn btn-danger btn-sm dltBtn" style="margin: 5px; height:30px; width:30px; border-radius:50%;" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+    ';
+            })
+            ->rawColumns(['photo', 'status', 'action'])
+            ->make(true);
     }
 
     /**

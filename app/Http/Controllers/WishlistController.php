@@ -5,6 +5,8 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Wishlist;
+use App\Models\UserProductInteraction;
+use DB;
 class WishlistController extends Controller
 {
     protected $product=null;
@@ -35,15 +37,28 @@ class WishlistController extends Controller
             $wishlist = new Wishlist;
             $wishlist->user_id = auth()->user()->id;
             $wishlist->product_id = $product->id;
-            $wishlist->price = ($product->price-($product->price*$product->discount)/100);
+            $wishlist->price = ($product->price - ($product->price * $product->discount) / 100);
             $wishlist->quantity = 1;
-            $wishlist->amount=$wishlist->price*$wishlist->quantity;
-            if ($wishlist->product->stock < $wishlist->quantity || $wishlist->product->stock <= 0) return back()->with('error','Stock not sufficient!.');
+            $wishlist->amount = $wishlist->price * $wishlist->quantity;
+            if ($wishlist->product->stock < $wishlist->quantity || $wishlist->product->stock <= 0)
+                return back()->with('error', 'Stock not sufficient!.');
             $wishlist->save();
         }
-        request()->session()->flash('success','Product successfully added to wishlist');
-        return back();       
-    }  
+        if (auth()->check()) {
+            UserProductInteraction::updateOrCreate(
+                [
+                    'user_id' => auth()->user()->id,
+                    'product_id' => $product->id,
+                    'interaction' => 'like', // Interaction type: "like" or "wishlist"
+                ],
+                [
+                    'weight' => DB::raw('weight + 1'), // Increment weight for repeated actions
+                ]
+            );
+        }
+        request()->session()->flash('success', 'Product successfully added to wishlist');
+        return back();
+    }
     
     public function wishlistDelete(Request $request){
         $wishlist = Wishlist::find($request->id);

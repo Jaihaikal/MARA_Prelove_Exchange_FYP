@@ -19,7 +19,7 @@
           <p class="lead text-gray-800 mb-5">Page Not Found</p>
           <p class="text-gray-500 mb-0">It looks like you found a glitch in the matrix...</p>
           {{-- {{dd(auth()->user())}}; --}}
-            <a href="{{route('home')}}">&larr; Back to Home</a>
+            {{-- <a href="{{route('home')}}">&larr; Back to Home</a> --}}
 
         </div>
       </div>

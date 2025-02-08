@@ -53,9 +53,13 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            // 'faculty_id' => ['required', 'exists:faculties,id'], // Ensures faculty exists in the faculties table
-            // 'phone' => ['required', 'string', 'min:10', 'max:15', 'unique:users'],
+            'student_id' => ['required', 'digits:10', 'unique:users'],
+            'faculty_id' => ['required', 'exists:faculties,id'], // Ensures faculty exists in the faculties table
+            'phone' => ['required', 'digits:10,11', 'min:10', 'max:11', 'unique:users'],
 
+        ], [
+            // 'student_id.digits' => 'The student ID must be 10 digits.',
+            'student_id.unique' => 'The student ID is already taken.',
         ]);
     }
 
@@ -71,9 +75,9 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            // 'student_id' => $data['student_id'],
-            // 'faculties_id' => $data['faculties_id'],
-            // // 'phone' => $data['phone'],
+            'student_id' => $data['student_id'],
+            'faculty_id' => $data['faculty_id'],
+            'phone' => $data['phone'],
         ]);
     }
 }

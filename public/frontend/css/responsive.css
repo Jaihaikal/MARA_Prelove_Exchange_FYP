@@ -1060,8 +1060,6 @@ Version:1.0
 }
 
 
-
-
 }
 /* Mobile Screen */
 @media only screen and (max-width: 450px) {
@@ -1454,9 +1452,9 @@ Version:1.0
 }
 .shop .nice-select {
 	width: 100%;
-	display: ;
 	margin-top: 4px;
 }
+
 .shop .view-mode {
 	float: right;
 	float: none;
@@ -1464,17 +1462,17 @@ Version:1.0
 	width: 100%;
 }
 .shop .view-mode li {
-	display: inline-block;
-	margin-right: 5px;
-	display: inline-block;
-	margin: 0;
-	mar0-t: mar;
-	margin-top: 4px;
-	width: 100%;
-	display: block;
-	display: inline-block;
-	display: ;
+    display: inline-block;
+    margin-right: 5px;
+    display: inline-block;
+    margin: 0;
+    margin-top: 0;
+    margin-top: 4px;
+    width: 100%;
+    display: block;
+    display: inline-block;
 }
+
 .shop .view-mode li a {
 	width: 80px;
 	height: 32px;

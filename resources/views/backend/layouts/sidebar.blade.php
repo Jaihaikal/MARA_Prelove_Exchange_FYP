@@ -194,6 +194,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
      <!-- Heading -->
+    @if(auth()->user()->role == 'admin')
     <div class="sidebar-heading">
         General Settings
     </div>
@@ -214,6 +215,7 @@
             <i class="fas fa-cog"></i>
             <span>Settings</span></a>
     </li>
+    @endif
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

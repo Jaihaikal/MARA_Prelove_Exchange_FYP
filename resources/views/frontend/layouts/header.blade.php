@@ -51,7 +51,7 @@
                         @php
                             $settings=DB::table('settings')->get();
                         @endphp                    
-                        <a href="{{route('home')}}"><img src="@foreach($settings as $data) {{$data->logo}} @endforeach" alt="logo"></a>
+                        <a href="{{route('home')}}"><img src="@foreach($settings as $data) {{$data->logo}} @endforeach" alt="logo" style="width: auto; height: 69px;"></a>
                     </div>
                     <!--/ End Logo -->
                     <!-- Search Form -->
@@ -133,6 +133,7 @@
                                     </div>
                                 </div>
                             @endauth
+
                             <!--/ End Shopping Item -->
                         </div>
                         {{-- <div class="sinlge-bar">
@@ -172,6 +173,7 @@
                             @endauth
                             <!--/ End Shopping Item -->
                         </div>
+                        
                     </div>
                 </div>
             </div>

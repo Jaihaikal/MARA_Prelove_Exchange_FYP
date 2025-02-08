@@ -4,137 +4,51 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\Brand;
-use App\Models\User;
 use Illuminate\Support\Str;
-use App\User as AppUser;
+use App\Models\Category;
 
 class ProductSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Retrieve categories and brands
-        $electronicsCategory = Category::where('title', 'Electronic')->first();
-        $clothingCategory = Category::where('title', 'Clothing')->first();
-        $studyMaterialCategory = Category::where('title', 'Study Material')->first();
+        $faker = \Faker\Factory::create();
 
-        $appleBrand = Brand::where('title', 'Apple')->first();
-        $samsungBrand = Brand::where('title', 'Samsung')->first();
-        $nikeBrand = Brand::where('title', 'Nike')->first();
+        // Fetch all parent categories
+        $parentCategories = Category::where('is_parent', true)->get();
 
-        // Assuming you have some users in your database, e.g., user_id 1
-        $userId = AppUser::first()->id;
+        foreach ($parentCategories as $parent) {
+            // Fetch subcategories for each parent
+            $subCategories = Category::where('parent_id', $parent->id)->get();
 
-        // Define sample products
-        $products = [
-            [
-                'title' => 'iPhone 14',
-                'summary' => 'Latest iPhone model with advanced features',
-                'description' => 'The new iPhone 14 comes with cutting-edge technology and improved battery life.',
-                'price' => 999.99,
-                'cat_id' => $electronicsCategory->id,
-                'child_cat_id' => null, // assuming no child category for simplicity
-                'brand_id' => $appleBrand->id,
-                'discount' => 10, // 10% discount
-                'status' => 'active',
-                'photo' => 'images/products/iphone_14.jpg',
-                'size' => '6.1 inches',
-                'stock' => 50,
-                'is_featured' => true,
-                'condition' => 'used',
-                'user_id' => $userId
-            ],
-            [
-                'title' => 'Samsung Galaxy S23',
-                'summary' => 'High-performance smartphone by Samsung',
-                'description' => 'Samsung Galaxy S23 offers a powerful camera and smooth performance.',
-                'price' => 899.99,
-                'cat_id' => $electronicsCategory->id,
-                'child_cat_id' => null,
-                'brand_id' => $samsungBrand->id,
-                'discount' => 15,
-                'status' => 'active',
-                'photo' => 'images/products/galaxy_s23.jpg',
-                'size' => '6.5 inches',
-                'stock' => 70,
-                'is_featured' => true,
-                'condition' => 'new',
-                'user_id' => $userId
-            ],
-            [
-                'title' => 'Nike Air Max',
-                'summary' => 'Popular Nike shoes with great comfort',
-                'description' => 'The Nike Air Max is designed for ultimate comfort and style.',
-                'price' => 150.00,
-                'cat_id' => $clothingCategory->id,
-                'child_cat_id' => null,
-                'brand_id' => $nikeBrand->id,
-                'discount' => 5,
-                'status' => 'active',
-                'photo' => 'images/products/nike_air_max.jpg',
-                'size' => '10 US',
-                'stock' => 30,
-                'is_featured' => false,
-                'condition' => 'new',
-                'user_id' => $userId
-            ],
-            [
-                'title' => 'MacBook Pro',
-                'summary' => 'Powerful laptop for professionals',
-                'description' => 'The MacBook Pro is a high-performance laptop designed for productivity.',
-                'price' => 1299.99,
-                'cat_id' => $electronicsCategory->id,
-                'child_cat_id' => null,
-                'brand_id' => $appleBrand->id,
-                'discount' => 20,
-                'status' => 'active',
-                'photo' => 'images/products/macbook_pro.jpg',
-                'size' => '13 inches',
-                'stock' => 15,
-                'is_featured' => true,
-                'condition' => 'used',
-                'user_id' => $userId
-            ],
-            [
-                'title' => 'Data Science Handbook',
-                'summary' => 'Comprehensive guide on data science',
-                'description' => 'A thorough book covering data science basics, algorithms, and applications.',
-                'price' => 45.00,
-                'cat_id' => $studyMaterialCategory->id,
-                'child_cat_id' => null,
-                'brand_id' => null, // No brand for books
-                'discount' => 0,
-                'status' => 'active',
-                'photo' => 'images/products/data_science_handbook.jpg',
-                'size' => 'N/A',
-                'stock' => 100,
-                'is_featured' => false,
-                'condition' => 'used',
-                'user_id' => $userId
-            ]
-        ];
+            foreach ($subCategories as $subCategory) {
+                // Create 20 products for each subcategory
+                for ($i = 1; $i <= 20; $i++) {
 
-        // Create product records
-        foreach ($products as $data) {
-            Product::create([
-                'title' => $data['title'],
-                'slug' => Str::slug($data['title']),
-                'summary' => $data['summary'],
-                'description' => $data['description'],
-                'price' => $data['price'],
-                'cat_id' => $data['cat_id'],
-                'child_cat_id' => $data['child_cat_id'],
-                'brand_id' => $data['brand_id'],
-                'discount' => $data['discount'],
-                'status' => $data['status'],
-                'photo' => $data['photo'],
-                'size' => $data['size'],
-                'stock' => $data['stock'],
-                'is_featured' => $data['is_featured'],
-                'condition' => $data['condition'],
-                'user_id' => $data['user_id']
-            ]);
+                    $photos = [];
+                    for ($j = 1; $j <= 3; $j++) {
+                        // Using Lorem Picsum or Placeholder Images
+                        $photos[] = $faker->imageUrl(300, 300, 'product', true, 'Product-' . $j);
+                    }
+                    Product::create([
+                        'title' => 'Product - ' . $subCategory->title . ' ' . $i,
+                        'slug' => Str::slug('Product - ' . $subCategory->title . ' ' . $i),
+                        'summary' => $faker->sentence(),
+                        'description' => $faker->paragraph(),
+                        'cat_id' => $parent->id, // Parent category ID
+                        'child_cat_id' => $subCategory->id, // Subcategory ID
+                        'price' => $faker->numberBetween(50, 1000), // Random price between 50 and 1000
+                        'brand_id' => $faker->numberBetween(1, 10), // Assuming you have 10 brands
+                        'discount' => $faker->numberBetween(0, 50), // Random discount between 0 and 50
+                        'status' => 'active',
+                        'photo' => '/storage/photos/1/Products/ProductDummy.jpg', // Store as comma-separated string
+                        'stock' => $faker->numberBetween(1, 5), // Random stock between 1 and 5
+                        'is_featured' => true, // Always featured
+                        'condition' => $faker->randomElement(['new', 'used']), // Random condition
+                        'user_id' => $faker->numberBetween(1, 10),
+                    ]);
+                }
+            }
         }
     }
+
 }

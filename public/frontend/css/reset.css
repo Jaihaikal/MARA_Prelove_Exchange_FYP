@@ -231,7 +231,7 @@ big {
 }
 
 .section {
-	padding: 100px 0;
+	padding: 50px 0;
 	position: relative;
 }
 .section-title {
@@ -283,41 +283,57 @@ big {
 	transition:all 0.4s ease;
 }
 /* Bread Crumbs */
+
+
 .breadcrumbs {
-	background-color: #F6F7FB;
-	position: relative;
-	padding: 30px 0px;
+    border: 1px solid #e0e0e0; /* Subtle border */
+    border-radius: 8px;       /* Rounded corners */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #fff;  /* White background */
+    padding: 15px;           /* Padding for better spacing */
+    margin-bottom: 5px;     /* Spacing below breadcrumbs */
+    display: flex;           /* Keep it flexible for responsiveness */
+    align-items: center;     /* Align vertically */
+    justify-content: space-between; /* Adjust spacing */
 }
-.breadcrumbs .bread-inner {
-	z-index: 22;
-	text-align: left;
-}
+
 .breadcrumbs .bread-list {
-	display: inline-block;
+    list-style: none; /* Remove default bullet points */
+    padding: 0;       /* Remove padding */
+    margin: 0;        /* Remove margin */
+    display: flex;    /* Flex layout for items */
+    flex-wrap: wrap;  /* Wrap items for responsiveness */
+    gap: 10px;        /* Add space between items */
 }
-.breadcrumbs ul li{
-	display: inline-block;
-	position: relative;
+
+.breadcrumbs .bread-list li {
+    font-size: 14px;    /* Adjust text size */
+    color: #555;        /* Subtle color */
+    display: flex;      /* Keep inline layout */
+    align-items: center; /* Align text with icons */
 }
-.breadcrumbs ul li i {
-	margin: 0px 10px;
-	font-size: 9px;
-	font-weight: 600;
-	color: #333;
+
+.breadcrumbs .bread-list li a {
+    text-decoration: none; /* Remove underline */
+    color: #3b3b3b;        /* Link color */
+    margin-right: 5px;     /* Space between link and arrow */
 }
-.breadcrumbs ul li a {
-	color: #333;
-	font-size: 14px;
-	font-weight: 400;
-	text-transform: capitalize;
+
+.breadcrumbs .bread-list li a:hover {
+    color: #F7941D;       /* Darker blue on hover */
 }
-.breadcrumbs ul li.active a {
-	color: #333;
-	display: inline-block;
+
+.breadcrumbs .bread-list li.active {
+    font-weight: bold;     /* Highlight active item */
+    color: #333;           /* Darker color for active */
 }
-.breadcrumbs ul li a:hover{
-	color:#F7941D;
+
+.breadcrumbs .ti-arrow-right {
+    font-size: 12px;       /* Smaller arrow */
+    color: #999;           /* Subtle arrow color */
+    margin: 0 5px;         /* Space around the arrow */
 }
+
 /*=============================
 	Start Demos CSS 
 ===============================*/
@@ -555,7 +571,7 @@ html {
 }
 
 body {
-	background: #fff;
+	background: #f1f1fa;
 	/* Fallback for when there is no custom background color defined. */
 }
 
