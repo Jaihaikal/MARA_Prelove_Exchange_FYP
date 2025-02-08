@@ -40,11 +40,11 @@
                                             <li class="has-dropdown">
                                                 <a
                                                     href="{{ route('product-cat', $cat_info->slug) }}">{{ $cat_info->title }}</a>
-                                                @if ($cat_info->child_cat->count() > 0)
+                                                @if ($cat_info->brands->count() > 0)
                                                     <ul class="sub-category">
-                                                        @foreach ($cat_info->child_cat as $sub_menu)
+                                                        @foreach ($cat_info->brands as $brand)
                                                             <li><a
-                                                                    href="{{ route('product-sub-cat', [$cat_info->slug, $sub_menu->slug]) }}">{{ $sub_menu->title }}</a>
+                                                                    href="{{ route('product-brand', $brand->slug) }}">{{ $brand->title }}</a>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -179,9 +179,9 @@
                                                 </a>
                                                 <div class="button-head">
                                                     <div class="product-action mr-4">
-                                                        <a data-toggle="modal" data-target="#{{ $product->id }}"
+                                                        {{-- <a data-toggle="modal" data-target="#{{ $product->id }}"
                                                             title="Quick View" href="#"><i
-                                                                class=" ti-eye"></i><span>Quick Shop</span></a>
+                                                                class=" ti-eye"></i><span>Quick Shop</span></a> --}}
                                                         <a title="Wishlist"
                                                             href="{{ route('add-to-wishlist', $product->slug) }}"
                                                             class="wishlist" data-id="{{ $product->id }}"><i

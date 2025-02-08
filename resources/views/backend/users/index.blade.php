@@ -93,9 +93,9 @@
             @endforeach
           </tbody>
         </table>
-        {{-- {{ $products->appends(['search' => request('search')])->links() }} --}}
-
-        <span style="float:right">{{$users->links()}}</span>
+        <span style="float:right"><div class="d-flex justify-content-end">
+          {{ $users->links('pagination::bootstrap-4') }}
+      </div></span>
       </div>
     </div>
 </div>

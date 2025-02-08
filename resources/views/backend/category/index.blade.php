@@ -23,7 +23,6 @@
                             <th>Slug</th>
                             <th>Is Parent</th>
                             <th>Parent</th>
-                            <th>Photo</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -101,13 +100,7 @@
                         orderable: false,
                         searchable: false
                     },
-                    {
-                        data: 'photo',
-                        name: 'photo',
-                        title: 'Photo',
-                        orderable: false,
-                        searchable: false
-                    },
+                    
                     {
                         data: 'status',
                         name: 'status',

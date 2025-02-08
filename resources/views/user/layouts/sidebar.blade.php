@@ -62,7 +62,7 @@
       </div>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{route('user.order.getData')}}">
+    <a class="nav-link" href="{{route('seller.order.index')}}">
         <i class="fas fa-hammer fa-chart-area"></i>
         <span>Your Orders</span>
     </a>

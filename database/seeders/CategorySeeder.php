@@ -9,41 +9,6 @@ use Str;
 
 class CategorySeeder extends Seeder
 {
-
-    // public function run()
-    // {
-    // $faker = \Faker\Factory::create();
-
-    // // Create 5 parent categories
-    // $parentIds = [];
-    // for ($i = 0; $i < 5; $i++) {
-    //     $parent = Category::create([
-    //         'title' => $faker->word,
-    //         'slug' => Str::slug($faker->unique()->word),
-    //         'summary' => $faker->sentence,
-    //         'photo' => $faker->imageUrl(200, 200, 'business'),
-    //         'is_parent' => true,
-    //         'parent_id' => null,
-    //         'added_by' => $faker->optional()->numberBetween(1, 10), // Assuming there are 10 users
-    //         'status' => $faker->randomElement(['active', 'inactive']),
-    //     ]);
-
-    //     $parentIds[] = $parent->id;
-    // }
-
-    // // Create 10 child categories with random parent IDs
-    // for ($i = 0; $i < 10; $i++) {
-    //     Category::create([
-    //         'title' => $faker->word,
-    //         'slug' => Str::slug($faker->unique()->word),
-    //         'summary' => $faker->sentence,
-    //         'is_parent' => false,
-    //         'parent_id' => $faker->randomElement($parentIds),
-    //         'added_by' => $faker->optional()->numberBetween(1, 10),
-    //         'status' => $faker->randomElement(['active', 'inactive']),
-    //     ]);
-    // }
-    // }
     /**
      * Run the database seeds.
      */
@@ -70,14 +35,19 @@ class CategorySeeder extends Seeder
             ]);
         }
 
+        $subCategoriesData = [
+            'Electronic' => ['Phone', 'Computer', 'Gadget'],
+            'Clothing' => ['Men', 'Women'],
+            'Study Material' => ['Book', 'Stationary']
+        ];
+
         foreach ($parentCategories as $parent) {
-            for ($j = 1; $j <= 2; $j++) {
+            foreach ($subCategoriesData[$parent->title] as $subCategoryTitle) {
                 Category::create([
-                    'title' => $parent->title . ' - Subcategory ' . $j,
-                    'slug' => Str::slug($parent->title . ' - Subcategory ' . $j),
-                    'summary' => 'This is the summary for ' . $parent->title . ' - Subcategory ' . $j,
-                    // 'photo' => $faker->imageUrl(200, 200, 'business'),
-                    'photo' => '/storage/photos/1/Products/Clothing.png',
+                    'title' => $subCategoryTitle,
+                    'slug' => Str::slug($subCategoryTitle),
+                    'summary' => 'This is the summary for ' . $subCategoryTitle,
+                    'photo' => $faker->imageUrl(200, 200, 'business'),
                     'status' => 'active',
                     'is_parent' => false,
                     'parent_id' => $parent->id,

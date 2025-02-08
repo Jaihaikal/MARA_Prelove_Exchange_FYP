@@ -15,11 +15,11 @@ class BrandSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        // Fetch all categories
-        $categories = Category::all();
+        // Fetch all parent categories
+        $parentCategories = Category::where('is_parent', 1)->get();
 
-        foreach ($categories as $category) {
-            // Create 5 brands for each category
+        foreach ($parentCategories as $category) {
+            // Create 5 brands for each parent category
             for ($i = 1; $i <= 5; $i++) {
                 Brand::create([
                     'title' => 'Brand - ' . $category->title . ' ' . $i, // Brand name based on category

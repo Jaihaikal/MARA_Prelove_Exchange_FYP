@@ -23,6 +23,7 @@ use App\Http\Controllers\User\UserProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\UserOrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -81,11 +82,13 @@ Route::post('/add-to-cart', [CartController::class, 'singleAddToCart'])->name('s
 Route::get('cart-delete/{id}', [CartController::class, 'cartDelete'])->name('cart-delete');
 Route::post('cart-update', [CartController::class, 'cartUpdate'])->name('cart.update');
 Route::get('/cart', function () {
-    return view('frontend.pages.cart'); })->name('cart');
+    return view('frontend.pages.cart');
+})->name('cart');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout')->middleware('user');
 // Wishlist
 Route::get('/wishlist', function () {
-    return view('frontend.pages.wishlist'); })->name('wishlist');
+    return view('frontend.pages.wishlist');
+})->name('wishlist');
 Route::get('/wishlist/{slug}', [WishlistController::class, 'wishlist'])->name('add-to-wishlist')->middleware('user');
 Route::get('wishlist-delete/{id}', [WishlistController::class, 'wishlistDelete'])->name('wishlist-delete');
 Route::post('cart/order', [OrderController::class, 'store'])->name('cart.order');
@@ -161,7 +164,6 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::get('/message/five', [MessageController::class, 'messageFive'])->name('messages.five');
     // Order
     Route::resource('/order', 'OrderController');
-    Route::get('order/getData', [OrderController::class, 'getData'])->name('order.getData');
     // Shipping
     Route::resource('/shipping', 'ShippingController');
     // Coupon
@@ -179,7 +181,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 });
 
 // User section start
-Route::group(['prefix' => 'user', 'middleware' => ['user']], function () {
+Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('user');
     // Profile
     Route::get('/profile', [HomeController::class, 'profile'])->name('user-profile');
@@ -201,17 +203,18 @@ Route::group(['prefix' => 'user', 'middleware' => ['user']], function () {
     Route::post('change-password', [HomeController::class, 'changPasswordStore'])->name('change.password');
     // Product
     Route::get('/user-profile/{id}', [FrontendController::class, 'showProfile'])->name('seller-profile');
-    Route::get('order/getData', [OrderController::class, 'sellerIndex'])->name('user.order.getData');
-    Route::resource('/order', 'OrderController');
-    // Route::patch('/order/{order}', [OrderController::class, 'sellerUpdate'])->name('seller.update');
+    Route::get('/buyer/order', [UserOrderController::class, 'index'])->name('seller.order.index');
+    Route::get('/buyer/order/{id}', [UserOrderController::class, 'show'])->name('seller.order.show');
+    Route::get('/buyer/order/{id}/edit', [UserOrderController::class, 'edit'])->name('seller.order.edit');
+    Route::delete('/buyer/order/{id}', [UserOrderController::class, 'destroy'])->name('seller.order.destroy');
 });
+Route::get('/user-review', [HomeController::class, 'productReviewIndex'])->name('user.productreview.index');
 
 
 
 Route::get('products', [UserProductController::class, 'index'])->name('user.product.index');
 Route::get('product/create', [UserProductController::class, 'create'])->name('user.product.create');
 Route::post('product', [UserProductController::class, 'store'])->name('user.product.store');
-Route::get('product/{id}', [UserProductController::class, 'show'])->name('user.product.show');
 Route::get('product/{id}/edit', [UserProductController::class, 'edit'])->name('user.product.edit');
 Route::patch('product/{id}', [UserProductController::class, 'update'])->name('user.product.update');
 Route::delete('product/{id}', [UserProductController::class, 'destroy'])->name('user.product.destroy');

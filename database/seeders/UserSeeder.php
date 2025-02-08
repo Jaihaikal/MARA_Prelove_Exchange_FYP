@@ -75,7 +75,7 @@ class UserSeeder extends Seeder
                     'password'=>Hash::make('1111'),
                     'phone'=>'0195542345',
                     'student_id'=>'2023765234',
-                    'faculty_id' => '6',
+                    'faculty_id' => '1',
                     'role'=>'user',
                     'status'=>'active'
                 ),
@@ -85,7 +85,7 @@ class UserSeeder extends Seeder
                     'password'=>Hash::make('1111'),
                     'phone'=>'0134457689',
                     'student_id'=>'2023045001',
-                    'faculty_id' => '7',
+                    'faculty_id' => '2',
                     'role'=>'user',
                     'status'=>'active'
                 ),
@@ -95,7 +95,7 @@ class UserSeeder extends Seeder
                     'password'=>Hash::make('1111'),
                     'phone'=>'0133329823',
                     'student_id'=>'2023890001',
-                    'faculty_id' => '8',
+                    'faculty_id' => '3',
                     'role'=>'user',
                     'status'=>'active'
                 ),
@@ -105,7 +105,7 @@ class UserSeeder extends Seeder
                     'password'=>Hash::make('1111'),
                     'phone'=>'013987367',
                     'student_id'=>'2023120001',
-                    'faculty_id' => '9',
+                    'faculty_id' => '4',
                     'role'=>'user',
                     'status'=>'active'
                 ),
@@ -115,7 +115,7 @@ class UserSeeder extends Seeder
                     'password'=>Hash::make('1111'),
                     'phone'=>'013987377',
                     'student_id'=>'2023122001',
-                    'faculty_id' => '10',
+                    'faculty_id' => '5',
                     'role'=>'user',
                     'status'=>'active'
                 )
