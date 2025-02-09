@@ -42,10 +42,8 @@
                                                     href="{{ route('product-cat', $cat_info->slug) }}">{{ $cat_info->title }}</a>
                                                 @if ($cat_info->brands->count() > 0)
                                                     <ul class="sub-category">
-                                                        @foreach ($cat_info->brands as $brand)
-                                                            <li><a
-                                                                    href="{{ route('product-brand', $brand->slug) }}">{{ $brand->title }}</a>
-                                                            </li>
+                                                        @foreach($cat_info->child_cat as $sub_menu)
+                                                            <li><a href="{{route('product-sub-cat',[$cat_info->slug,$sub_menu->slug])}}">{{$sub_menu->title}}</a></li>                                                        
                                                         @endforeach
                                                     </ul>
                                                 @endif
@@ -53,7 +51,6 @@
                                         @endforeach
                                     @endif
                                 </ul>
-
                             </div>
                             <!--/ End Single Widget -->
                             <!-- Shop By Price -->
@@ -112,18 +109,23 @@
                             <!-- Single Widget -->
                             <div class="single-widget category">
                                 <h3 class="title">Brands</h3>
-                                <ul class="categor-list">
-                                    @php
-                                        $brands = DB::table('brands')
-                                            ->orderBy('title', 'ASC')
-                                            ->where('status', 'active')
-                                            ->get();
-                                    @endphp
-                                    @foreach ($brands as $brand)
-                                        <li><a href="{{ route('product-brand', $brand->slug) }}">{{ $brand->title }}</a>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                <input type="text" id="searchBrand" onkeyup="filterBrands()" placeholder="Search for brands..." class="form-control mb-3">
+                                
+                                <div class="brand-slider-container">
+                                    <ul id="brandList" class="categor-list">
+                                        @php
+                                            $brands = DB::table('brands')
+                                                ->orderBy('title', 'ASC')
+                                                ->where('status', 'active')
+                                                ->get();
+                                        @endphp
+                                        @foreach ($brands as $brand)
+                                            <li class="brand-item">
+                                                <a href="{{ route('product-brand', $brand->slug) }}">{{ $brand->title }}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                             <!--/ End Single Widget -->
                         </div>
@@ -444,6 +446,28 @@
             text-align: center;
             /* Center-align content (optional) */
         }
+
+        .brand-slider-container {
+    max-height: 300px; /* Set a maximum height for the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px 0;
+}
+
+/* Style the list of brands */
+.categor-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style individual brand items */
+#searchBrand {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
     </style>
 @endpush
 @push('scripts')
@@ -481,5 +505,22 @@
                     "  -  " + m_currency + $("#slider-range").slider("values", 1));
             }
         })
+
+        function filterBrands() {
+    const input = document.getElementById('searchBrand');
+    const filter = input.value.toLowerCase();
+    const brandList = document.getElementById('brandList');
+    const brands = brandList.getElementsByTagName('li');
+    
+    // Loop through all list items and hide those that don't match the search
+    Array.from(brands).forEach(function(brand) {
+        const brandName = brand.textContent || brand.innerText;
+        if (brandName.toLowerCase().indexOf(filter) > -1) {
+            brand.style.display = "";
+        } else {
+            brand.style.display = "none";
+        }
+    });
+}
     </script>
 @endpush

@@ -13,10 +13,10 @@
             <div class="carousel-inner" role="listbox">
                 @foreach ($banners as $key => $banner)
                     <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                        <img class="first-slide" src="{{ $banner->photo }}" alt="First slide">
+                        <img class="first-slide" src="{{ $banner->photo }}" alt="First slide" style="filter: brightness(50%);">
                         <div class="carousel-caption d-none d-md-block text-left">
                             <h1 class="wow fadeInDown">{{ $banner->title }}</h1>
-                            <p>{!! html_entity_decode($banner->description) !!}</p>
+                            <p style="color: white;">{!! html_entity_decode($banner->description) !!}</p>
                             <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{ route('product-grids') }}"
                                 role="button">Shop Now<i class="far fa-arrow-alt-circle-right"></i></i></a>
                         </div>
@@ -587,12 +587,7 @@
 @push('styles')
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
-    <style>
-        .slick-prev:before,
-        .slick-next:before {
-            color: black;
-        }
-    </style>
+    
 @endpush
 
 @push('scripts')

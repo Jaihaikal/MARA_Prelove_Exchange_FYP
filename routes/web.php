@@ -24,6 +24,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserOrderController;
+
+use App\Http\Controllers\StripeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -184,8 +187,8 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('user');
     // Profile
-    Route::get('/profile', [HomeController::class, 'profile'])->name('user-profile');
-    Route::post('/profile/{id}', [HomeController::class, 'profileUpdate'])->name('user-profile-update');
+    Route::get('your/profile', [HomeController::class, 'profile'])->name('user-profile');
+    Route::post('your/profile/{id}', [HomeController::class, 'profileUpdate'])->name('user-profile-update');
     // Order
 
     // Product Review
@@ -210,8 +213,6 @@ Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
 });
 Route::get('/user-review', [HomeController::class, 'productReviewIndex'])->name('user.productreview.index');
 
-
-
 Route::get('products', [UserProductController::class, 'index'])->name('user.product.index');
 Route::get('product/create', [UserProductController::class, 'create'])->name('user.product.create');
 Route::post('product', [UserProductController::class, 'store'])->name('user.product.store');
@@ -232,3 +233,8 @@ Route::delete('/order/delete/{id}', [HomeController::class, 'userOrderDelete'])-
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     Lfm::routes();
 });
+
+Route::get('stripe', [StripeController::class, 'showPaymentForm'])->name('stripe');
+Route::post('stripe', [StripeController::class, 'handlePayment'])->name('stripe.post');
+Route::get('payment-success', [StripeController::class, 'success'])->name('payment.success');
+Route::get('payment-cancel', [StripeController::class, 'cancel'])->name('payment.cancel');
