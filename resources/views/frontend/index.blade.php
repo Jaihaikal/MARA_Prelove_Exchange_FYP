@@ -76,23 +76,23 @@
     </section>
     <!-- End Small Banner -->
     {{-- product recomendations --}}
-    <div class="product-area section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title">
-                        <h2>Recommended Products for You</h2>
+    @if (auth()->check())
+        <div class="product-area section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title">
+                            <h2>Recommended Products for You</h2>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="product-info">
-                        <div class="row">
-                            @if ($recommended_products->isNotEmpty())
-                                @foreach ($recommended_products as $product)
-                                    <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{ $product->cat_id }}">
-                                        <div class="single-product">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-info">
+                            <div class="recommended-products-slider">
+                                @if ($recommended_products->isNotEmpty())
+                                    @foreach ($recommended_products as $product)
+                                        <div class="single-product" style="margin: 15px;"> <!-- Adjust the margin value as needed -->
                                             <div class="product-img">
                                                 <a href="{{ route('product-detail', $product->slug) }}">
                                                     @php
@@ -100,8 +100,7 @@
                                                     @endphp
                                                     <div class="image-wrapper">
                                                         @if (!empty($photo[0]))
-                                                            <img class="product-image" src="{{ $photo[0] }}"
-                                                                alt="Product Image">
+                                                            <img class="product-image" src="{{ $photo[0] }}" alt="Product Image">
                                                         @else
                                                             <div class="blank-frame"></div>
                                                         @endif
@@ -118,44 +117,35 @@
                                                 </a>
                                                 <div class="button-head">
                                                     <div class="product-action mr-4">
-                                                        <a title="Wishlist"
-                                                            href="{{ route('add-to-wishlist', $product->slug) }}"
-                                                            class="wishlist" data-id="{{ $product->id }}"><i
-                                                                class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                        <a title="Wishlist" href="{{ route('add-to-wishlist', $product->slug) }}" class="wishlist" data-id="{{ $product->id }}">
+                                                            <i class="ti-heart"></i><span>Add to Wishlist</span>
+                                                        </a>
                                                     </div>
                                                     <div class="product-action-2">
-                                                        <a title="Add to cart"
-                                                            href="{{ route('add-to-cart', $product->slug) }}">Add to
-                                                            cart</a>
+                                                        <a title="Add to cart" href="{{ route('add-to-cart', $product->slug) }}">Add to cart</a>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="product-content">
-                                                <h3><a
-                                                        href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
-                                                </h3>
+                                                <h3><a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
                                                 <div class="product-price">
                                                     @php
-                                                        $after_discount =
-                                                            $product->price -
-                                                            ($product->price * $product->discount) / 100;
+                                                        $after_discount = $product->price - ($product->price * $product->discount) / 100;
                                                     @endphp
                                                     <span>RM {{ number_format($after_discount, 2) }}</span>
-                                                    <del style="padding-left:4%;">RM
-                                                        {{ number_format($product->price, 2) }}</del>
+                                                    <del style="padding-left:4%;">RM {{ number_format($product->price, 2) }}</del>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            @endif
+                                    @endforeach
+                                @endif
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-    </div>
+    @endif
     <!-- Start Product Area -->
     <div class="product-area section" style="margin:0px;">
         <div class="container">
@@ -343,51 +333,9 @@
     <!-- End Shop Blog  -->
 
     <!-- Start Shop Services Area -->
-    <section class="shop-services section home">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-rocket"></i>
-                        <h4>Free shiping</h4>
-                        <p>Orders over $100</p>
-                    </div>
-                    <!-- End Single Service -->
-                </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-reload"></i>
-                        <h4>Free Return</h4>
-                        <p>Within 30 days returns</p>
-                    </div>
-                    <!-- End Single Service -->
-                </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-lock"></i>
-                        <h4>Sucure Payment</h4>
-                        <p>100% secure payment</p>
-                    </div>
-                    <!-- End Single Service -->
-                </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-tag"></i>
-                        <h4>Best Peice</h4>
-                        <p>Guaranteed price</p>
-                    </div>
-                    <!-- End Single Service -->
-                </div>
-            </div>
-        </div>
-    </section>
+    
     <!-- End Shop Services Area -->
 
-    @include('frontend.layouts.newsletter')
 
     <!-- Modal -->
     @if ($product_lists)
@@ -634,5 +582,57 @@
             }
             return false
         }
+    </script>
+@endpush
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+    <style>
+        .slick-prev:before,
+        .slick-next:before {
+            color: black;
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.recommended-products-slider').slick({
+                infinite: true,
+                slidesToShow: 4,
+                slidesToScroll: 2,
+                autoplay: true,
+                autoplaySpeed: 2000,
+                dots: true,
+                arrows: true,
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 1,
+                            infinite: true,
+                            dots: true
+                        }
+                    },
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        });
     </script>
 @endpush
