@@ -13,7 +13,7 @@
             <div class="carousel-inner" role="listbox">
                 @foreach ($banners as $key => $banner)
                     <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                        <img class="first-slide" src="{{ $banner->photo }}" alt="First slide" style="filter: brightness(50%);">
+                        <img class="first-slide" src="{{ $banner->photo }}" alt="First slide">
                         <div class="carousel-caption d-none d-md-block text-left">
                             <h1 class="wow fadeInDown">{{ $banner->title }}</h1>
                             <p style="color: white;">{!! html_entity_decode($banner->description) !!}</p>
@@ -587,7 +587,7 @@
 @push('styles')
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
-    
+
 @endpush
 
 @push('scripts')
